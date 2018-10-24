@@ -68,6 +68,7 @@
         header-align="center"
         align="center"
         width="180"
+        :formatter="dateFormat"
         label="创建时间">
       </el-table-column>
       <el-table-column
@@ -75,6 +76,7 @@
         header-align="center"
         align="center"
         width="180"
+        :formatter="dateFormat"
         label="修改时间">
       </el-table-column>
       <el-table-column
@@ -105,6 +107,7 @@
 
 <script>
   import AddOrUpdate from './user-add-or-update'
+  import { formatDate } from '@/utils/format'
   export default {
     data () {
       return {
@@ -127,6 +130,13 @@
       this.getDataList()
     },
     methods: {
+      dateFormat (row, column) {
+        var date = row[column.property]
+        if (date === undefined || date == null) {
+          return ''
+        }
+        return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true

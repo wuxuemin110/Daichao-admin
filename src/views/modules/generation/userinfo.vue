@@ -30,6 +30,7 @@
         prop="insertTime"
         header-align="center"
         align="center"
+        :formatter="dateFormat"
         label="注册时间">
       </el-table-column>
     </el-table>

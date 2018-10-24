@@ -66,6 +66,7 @@
         header-align="center"
         align="center"
         width="180"
+        :formatter="dateFormat"
         label="创建时间">
       </el-table-column>
     </el-table>
@@ -82,6 +83,7 @@
 </template>
 
 <script>
+  import { formatDate } from '@/utils/format'
   export default {
     data () {
       return {
@@ -100,6 +102,13 @@
       this.getDataList()
     },
     methods: {
+      dateFormat (row, column) {
+        var date = row[column.property]
+        if (date === undefined || date == null) {
+          return ''
+        }
+        return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
