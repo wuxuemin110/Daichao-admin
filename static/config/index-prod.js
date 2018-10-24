@@ -5,7 +5,7 @@
   window.SITE_CONFIG = {};
 
   // api接口请求地址
-  window.SITE_CONFIG['baseUrl'] = 'http://47.99.103.114';
+  window.SITE_CONFIG['baseUrl'] = 'http://juzi.liulianggame.com:8080/loan-server';
 
   // cdn地址 = 域名 + 版本号
   window.SITE_CONFIG['domain']  = './'; // 域名

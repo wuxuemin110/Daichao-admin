@@ -4,8 +4,9 @@
       <el-form-item label="代超名称">
         <el-input v-model="dataForm.loanName" placeholder="代超名称" clearable style="width: 150px;"></el-input>
       </el-form-item>
-      <el-form-item label="点击时间">
+      <el-form-item  label="点击时间">
         <el-date-picker
+          unlink-panels="false"
           v-model="dataForm.createTime"
           type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
