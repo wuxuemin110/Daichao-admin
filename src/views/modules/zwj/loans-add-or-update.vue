@@ -20,8 +20,8 @@
       </el-form-item>
 
       <!--<el-form-item label="热点" prop="hotTag">-->
-          <!--<el-input v-model="dataForm.hotTag" maxlength="30" placeholder="热点"></el-input>-->
-        <!--</el-form-item>-->
+      <!--<el-input v-model="dataForm.hotTag" maxlength="30" placeholder="热点"></el-input>-->
+      <!--</el-form-item>-->
       <el-form-item label="首页推荐" >
         <template>
           <el-radio v-model="dataForm.orderNum" label="1">是</el-radio>
@@ -38,29 +38,29 @@
             size="mini"
             @close="colorClose(tag)"
             v-bind:style="{background:tag.name,width:'auto'}"
-            >
+          >
             {{tag.name}}
           </el-tag></div>
           <el-collapse-item style="height: 38px;line-height: 38px;" title="" name="1">
             <div class="tagDiv" v-for="item in tags"><span class="tagcolor" v-bind:style="{background:item.name}"></span><span v-on:click="getColor(item)" class="tagname">{{item.name}}</span></div>
           </el-collapse-item>
         </el-collapse>
-        </el-form-item>
+      </el-form-item>
       <el-form-item label="最小金额" prop="minAmount">
-          <el-input v-model="dataForm.minAmount" maxlength="30" placeholder="最小金额"></el-input>元
-        </el-form-item>
+        <el-input v-model="dataForm.minAmount" maxlength="30" placeholder="最小金额"></el-input>元
+      </el-form-item>
       <el-form-item label="最大金额" prop="maxAmount">
-          <el-input v-model="dataForm.maxAmount" maxlength="30" placeholder="最大金额"></el-input>元
+        <el-input v-model="dataForm.maxAmount" maxlength="30" placeholder="最大金额"></el-input>元
 
-        </el-form-item><el-form-item label="最小天数" prop="minDays">
-          <el-input v-model="dataForm.minDays" maxlength="30" placeholder="最小天数"></el-input>天
+      </el-form-item><el-form-item label="最小天数" prop="minDays">
+      <el-input v-model="dataForm.minDays" maxlength="30" placeholder="最小天数"></el-input>天
 
-        </el-form-item><el-form-item label="最大天数" prop="maxDays">
-          <el-input v-model="dataForm.maxDays" maxlength="30" placeholder="最大天数"></el-input>天
+    </el-form-item><el-form-item label="最大天数" prop="maxDays">
+      <el-input v-model="dataForm.maxDays" maxlength="30" placeholder="最大天数"></el-input>天
 
-        </el-form-item><el-form-item label="成功年化率" prop="successRate">
-          <el-input v-model="dataForm.successRate" maxlength="30" placeholder="成功年化率"></el-input>%
-        </el-form-item>
+    </el-form-item><el-form-item label="成功年化率" prop="successRate">
+      <el-input v-model="dataForm.successRate" maxlength="30" placeholder="成功年化率"></el-input>%
+    </el-form-item>
 
       <el-form-item label="标签" >
         <el-collapse style="padding: 0;" class="el-input__inner">
@@ -76,50 +76,50 @@
           </el-tag></div>
           <el-collapse-item style="height: 38px;line-height: 38px;" title="" name="1">
             <div v-for="(item,index) in tabDataList" v-if="item.secondTypes.length>0" >
-            <div class="tagDiv" style="width: 100%;" ><span class="tagname" style="border: none;color: #666;">{{item.typeName}}:</span></div>
-            <div class="tagDiv"  v-for="item2 in item.secondTypes" v-on:click="getTab(item2,item)" ><span class="tagname">{{item2.typeName}}</span></div>
+              <div class="tagDiv" style="width: 100%;" ><span class="tagname" style="border: none;color: #666;">{{item.typeName}}:</span></div>
+              <div class="tagDiv"  v-for="item2 in item.secondTypes" v-on:click="getTab(item2,item)" ><span class="tagname">{{item2.typeName}}</span></div>
             </div>
           </el-collapse-item>
         </el-collapse>
 
-        </el-form-item>
+      </el-form-item>
       <div class="tabWrap" v-if="selectTab.length>0">
         <el-form-item :label="item.typeName" v-for="item in selectTab">
           <el-input v-model="item.level" maxlength="30" placeholder="排序"></el-input>
         </el-form-item>
       </div>
-      	  <!--<el-form-item label="公积金" prop="provideSecs">-->
-          <!--<el-input v-model="dataForm.provideSecs" maxlength="30" placeholder="公积金"></el-input>-->
-        <!--</el-form-item>-->
+      <!--<el-form-item label="公积金" prop="provideSecs">-->
+      <!--<el-input v-model="dataForm.provideSecs" maxlength="30" placeholder="公积金"></el-input>-->
+      <!--</el-form-item>-->
 
       <el-form-item label="成功次数" prop="successCount">
-          <el-input v-model="dataForm.successCount" maxlength="30" placeholder="成功次数"></el-input>
-        </el-form-item>
+        <el-input v-model="dataForm.successCount" maxlength="30" placeholder="成功次数"></el-input>
+      </el-form-item>
 
 
       <el-form-item label="日年化率" prop="dayRate">
-          <el-input v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input>%
-        </el-form-item>
+        <el-input v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input>%
+      </el-form-item>
 
 
       <!--<el-form-item label="描述" prop="applyCondition">-->
-          <!--<el-input v-model="dataForm.applyCondition" maxlength="30" placeholder="描述"></el-input>-->
-        <!--</el-form-item>-->
+      <!--<el-input v-model="dataForm.applyCondition" maxlength="30" placeholder="描述"></el-input>-->
+      <!--</el-form-item>-->
       <!--<el-form-item label="描述2" prop="description">-->
-          <!--<el-input v-model="dataForm.description" maxlength="30" placeholder="描述"></el-input>-->
-        <!--</el-form-item>-->
+      <!--<el-input v-model="dataForm.description" maxlength="30" placeholder="描述"></el-input>-->
+      <!--</el-form-item>-->
 
       <!--<el-form-item label="申请条件" prop="applyMaterial">-->
-          <!--<el-input v-model="dataForm.applyMaterial" maxlength="30" placeholder="申请条件"></el-input>-->
-        <!--</el-form-item>-->
+      <!--<el-input v-model="dataForm.applyMaterial" maxlength="30" placeholder="申请条件"></el-input>-->
+      <!--</el-form-item>-->
 
-        <el-form-item label="跳转地址" prop="linkUrl">
-          <el-input v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
-        </el-form-item>
-            <!--<el-form-item label="序号" prop="linkUrl">-->
-          <!--<el-input v-model="dataForm.orderNum" maxlength="250" placeholder="序号"></el-input>-->
-        <!--</el-form-item>-->
-      </el-form>
+      <el-form-item label="跳转地址" prop="linkUrl">
+        <el-input v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
+      </el-form-item>
+      <!--<el-form-item label="序号" prop="linkUrl">-->
+      <!--<el-input v-model="dataForm.orderNum" maxlength="250" placeholder="序号"></el-input>-->
+      <!--</el-form-item>-->
+    </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -238,60 +238,83 @@
         this.selectTab.splice(this.selectTab.indexOf(tag), 1)
       },
       init (id) {
+        console.log(id,'进入')
         this.uploadUrl = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
         console.log(id)
+        this.visible = true
         if (id) {
           this.dataForm.loanId = id
+
+          this.$nextTick(() => {
+            this.$refs['dataForm'].resetFields()
+            if (this.dataForm.loanId) {
+              this.$http({
+                url: this.$http.adornUrl(`/generation/loans/info/${this.dataForm.loanId}`),
+                // url: this.$http.adornUrl(`/sys/loanproduct/info/${this.dataForm.loanId}`),
+                method: 'get',
+                params: this.$http.adornParams()
+              }).then(({data}) => {
+                console.log(data)
+                if (data && data.code === 0) {
+                  this.dataForm.loanId = data.loans.loanId
+                  this.dataForm.loanName = data.loans.loanName
+                  this.dataForm.loanIconUrl = data.loans.loanIconUrl
+                  this.dataForm.hotTag = data.loans.hotTag
+                  this.dataForm.color = data.loans.color
+                  this.dataForm.minAmount = data.loans.minAmount
+                  this.dataForm.maxAmount = data.loans.maxAmount
+                  this.dataForm.minDays = data.loans.minDays
+                  this.dataForm.maxDays = data.loans.maxDays
+                  this.dataForm.successRate = data.loans.successRate
+                  this.dataForm.successRateTxt = data.loans.successRateTxt
+                  this.dataForm.dayRate = data.loans.dayRate
+                  this.dataForm.applyCondition = data.loans.applyCondition
+                  this.dataForm.applyMaterial = data.loans.applyMaterial
+                  this.dataForm.linkUrl = data.loans.linkUrl
+                  this.dataForm.provideSecs = data.loans.provideSecs
+                  this.dataForm.successCount = data.loans.successCount
+                  this.dataForm.orderNum = data.loans.orderNum
+                  this.dataForm.description = data.loans.description
+                  this.selectTab.length=0
+                  data.loanTypeSecond.forEach((n) => {
+                    var obj = {}
+                    obj.typeId = n.typeId
+                    obj.level = n.level
+                    obj.typeName = n.typeName
+                    obj.superTypeId = n.superTypeId
+                    this.selectTab.push(obj)
+                  })
+                  var obj = {}
+                  obj.name = data.loans.color
+                  this.selectColor.length=0
+
+                  this.selectColor.push(obj)
+
+                }
+              })
+            }
+          })
+        }else{
+          this.dataForm={
+            loanId: '',
+            loanName: '',
+            loanIconUrl: '',
+            linkUrl: '',
+            color: '',
+            minAmount: '',
+            maxAmount: '',
+            minDays: '',
+            maxDays: '',
+            successRate: '',
+            dayRate: '',
+            successCount: 0,
+            orderNum: '1'
+          }
+          this.selectColor.length=0
+          this.selectTab.length=0
         }
 
-        this.visible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
-          if (this.dataForm.loanId) {
-            this.$http({
-              url: this.$http.adornUrl(`/generation/loans/info/${this.dataForm.loanId}`),
-              // url: this.$http.adornUrl(`/sys/loanproduct/info/${this.dataForm.loanId}`),
-              method: 'get',
-              params: this.$http.adornParams()
-            }).then(({data}) => {
-              console.log(data)
-              if (data && data.code === 0) {
-                this.dataForm.loanId = data.loans.loanId
-                this.dataForm.loanName = data.loans.loanName
-                this.dataForm.loanIconUrl = data.loans.loanIconUrl
-                this.dataForm.hotTag = data.loans.hotTag
-                this.dataForm.color = data.loans.color
-                this.dataForm.minAmount = data.loans.minAmount
-                this.dataForm.maxAmount = data.loans.maxAmount
-                this.dataForm.minDays = data.loans.minDays
-                this.dataForm.maxDays = data.loans.maxDays
-                this.dataForm.successRate = data.loans.successRate
-                this.dataForm.successRateTxt = data.loans.successRateTxt
-                this.dataForm.dayRate = data.loans.dayRate
-                this.dataForm.applyCondition = data.loans.applyCondition
-                this.dataForm.applyMaterial = data.loans.applyMaterial
-                this.dataForm.linkUrl = data.loans.linkUrl
-                this.dataForm.provideSecs = data.loans.provideSecs
-                this.dataForm.successCount = data.loans.successCount
-                this.dataForm.orderNum = data.loans.orderNum
-                this.dataForm.description = data.loans.description
-                this.selectTab.length=0
-                data.loanTypeSecond.forEach((n) => {
-                  var obj = {}
-                  obj.typeId = n.typeId
-                  obj.level = n.level
-                  obj.typeName = n.typeName
-                  obj.superTypeId = n.superTypeId
-                  this.selectTab.push(obj)
-                })
-                var obj = {}
-                obj.name = data.loans.color
-                this.selectColor.length=0
-                this.selectColor.push(obj)
-              }
-            })
-          }
-        })
+
       },
       getTabDataList () {
         this.$http({
@@ -338,7 +361,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (this.dataForm.orderNum ==1 && this.selectColor.length > 0) {
-            this.dataForm.color = this.selectColor[0].name
+              this.dataForm.color = this.selectColor[0].name
             } else {
               this.$message({
                 message: '请选择颜色',
