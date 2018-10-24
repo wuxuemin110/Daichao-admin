@@ -1,6 +1,6 @@
 <template>
   <div class="mod-home">
-    <h3>11</h3>
+    <h3></h3>
     <p>
       <!-- 描述 -->
     </p>
