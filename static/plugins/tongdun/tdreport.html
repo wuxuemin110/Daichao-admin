@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>同盾-信贷保镖详细报告</title>
+    <!--<link rel="stylesheet" href="http://cdnjs.tongdun.cn/bodyguard/css/tdstyle.1.0.css">-->
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
+    <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+     <script src="tdreportv4.js"></script>
+    <!--<script type="text/javascript" charset="utf-8" src="http://cdnjs.tongdun.cn/bodyguard/tdreportv4.1.0.min.js"></script> -->
+</head>
+<body>
+<div>背景内容</div>
+<script>
+  //HTML DOM fully loaded, and fired window.onload later. 
+  document.onreadystatechange = function(e) {
+      if (document.readyState === 'complete') {
+          window.addEventListener ('message', function(e) {
+            $.showReport(e.data);
+          });
+      } 
+  };
+</script>
+
+</body>
+</html>
