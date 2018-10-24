@@ -2,7 +2,7 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.bannerTitle" placeholder="banner" clearable></el-input>
+        <el-input v-model="dataForm.name" placeholder="banner" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -162,6 +162,7 @@
       // 多选
       selectionChangeHandle (val) {
         this.dataListSelections = val
+        console.log(val)
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
@@ -174,8 +175,9 @@
       deleteHandle (id) {
 
         var ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.id
+          return item.bannerId
         })
+        console.log(ids)
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
