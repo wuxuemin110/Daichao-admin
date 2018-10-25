@@ -238,60 +238,83 @@
         this.selectTab.splice(this.selectTab.indexOf(tag), 1)
       },
       init (id) {
+        console.log(id,'进入')
         this.uploadUrl = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
         console.log(id)
+        this.visible = true
         if (id) {
           this.dataForm.loanId = id
+
+          this.$nextTick(() => {
+            this.$refs['dataForm'].resetFields()
+            if (this.dataForm.loanId) {
+              this.$http({
+                url: this.$http.adornUrl(`/generation/loans/info/${this.dataForm.loanId}`),
+                // url: this.$http.adornUrl(`/sys/loanproduct/info/${this.dataForm.loanId}`),
+                method: 'get',
+                params: this.$http.adornParams()
+              }).then(({data}) => {
+                console.log(data)
+                if (data && data.code === 0) {
+                  this.dataForm.loanId = data.loans.loanId
+                  this.dataForm.loanName = data.loans.loanName
+                  this.dataForm.loanIconUrl = data.loans.loanIconUrl
+                  this.dataForm.hotTag = data.loans.hotTag
+                  this.dataForm.color = data.loans.color
+                  this.dataForm.minAmount = data.loans.minAmount
+                  this.dataForm.maxAmount = data.loans.maxAmount
+                  this.dataForm.minDays = data.loans.minDays
+                  this.dataForm.maxDays = data.loans.maxDays
+                  this.dataForm.successRate = data.loans.successRate
+                  this.dataForm.successRateTxt = data.loans.successRateTxt
+                  this.dataForm.dayRate = data.loans.dayRate
+                  this.dataForm.applyCondition = data.loans.applyCondition
+                  this.dataForm.applyMaterial = data.loans.applyMaterial
+                  this.dataForm.linkUrl = data.loans.linkUrl
+                  this.dataForm.provideSecs = data.loans.provideSecs
+                  this.dataForm.successCount = data.loans.successCount
+                  this.dataForm.orderNum = data.loans.orderNum
+                  this.dataForm.description = data.loans.description
+                  this.selectTab.length=0
+                  data.loanTypeSecond.forEach((n) => {
+                    var obj = {}
+                    obj.typeId = n.typeId
+                    obj.level = n.level
+                    obj.typeName = n.typeName
+                    obj.superTypeId = n.superTypeId
+                    this.selectTab.push(obj)
+                  })
+                  var obj = {}
+                  obj.name = data.loans.color
+                  this.selectColor.length=0
+
+                  this.selectColor.push(obj)
+
+                }
+              })
+            }
+          })
+        }else{
+          this.dataForm={
+            loanId: '',
+            loanName: '',
+            loanIconUrl: '',
+            linkUrl: '',
+            color: '',
+            minAmount: '',
+            maxAmount: '',
+            minDays: '',
+            maxDays: '',
+            successRate: '',
+            dayRate: '',
+            successCount: 0,
+            orderNum: '1'
+          }
+          this.selectColor.length=0
+          this.selectTab.length=0
         }
 
-        this.visible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
-          if (this.dataForm.loanId) {
-            this.$http({
-              url: this.$http.adornUrl(`/generation/loans/info/${this.dataForm.loanId}`),
-              // url: this.$http.adornUrl(`/sys/loanproduct/info/${this.dataForm.loanId}`),
-              method: 'get',
-              params: this.$http.adornParams()
-            }).then(({data}) => {
-              console.log(data)
-              if (data && data.code === 0) {
-                this.dataForm.loanId = data.loans.loanId
-                this.dataForm.loanName = data.loans.loanName
-                this.dataForm.loanIconUrl = data.loans.loanIconUrl
-                this.dataForm.hotTag = data.loans.hotTag
-                this.dataForm.color = data.loans.color
-                this.dataForm.minAmount = data.loans.minAmount
-                this.dataForm.maxAmount = data.loans.maxAmount
-                this.dataForm.minDays = data.loans.minDays
-                this.dataForm.maxDays = data.loans.maxDays
-                this.dataForm.successRate = data.loans.successRate
-                this.dataForm.successRateTxt = data.loans.successRateTxt
-                this.dataForm.dayRate = data.loans.dayRate
-                this.dataForm.applyCondition = data.loans.applyCondition
-                this.dataForm.applyMaterial = data.loans.applyMaterial
-                this.dataForm.linkUrl = data.loans.linkUrl
-                this.dataForm.provideSecs = data.loans.provideSecs
-                this.dataForm.successCount = data.loans.successCount
-                this.dataForm.orderNum = data.loans.orderNum
-                this.dataForm.description = data.loans.description
-                this.selectTab.length=0
-                data.loanTypeSecond.forEach((n) => {
-                  var obj = {}
-                  obj.typeId = n.typeId
-                  obj.level = n.level
-                  obj.typeName = n.typeName
-                  obj.superTypeId = n.superTypeId
-                  this.selectTab.push(obj)
-                })
-                var obj = {}
-                obj.name = data.loans.color
-                this.selectColor.length=0
-                this.selectColor.push(obj)
-              }
-            })
-          }
-        })
+
       },
       getTabDataList () {
         this.$http({
