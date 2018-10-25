@@ -238,7 +238,7 @@
         this.selectTab.splice(this.selectTab.indexOf(tag), 1)
       },
       init (id) {
-        console.log(id,'进入')
+        console.log(id, '进入')
         this.uploadUrl = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
         console.log(id)
         this.visible = true
@@ -275,7 +275,7 @@
                   this.dataForm.successCount = data.loans.successCount
                   this.dataForm.orderNum = data.loans.orderNum
                   this.dataForm.description = data.loans.description
-                  this.selectTab.length=0
+                  this.selectTab.length = 0
                   data.loanTypeSecond.forEach((n) => {
                     var obj = {}
                     obj.typeId = n.typeId
@@ -286,16 +286,15 @@
                   })
                   var obj = {}
                   obj.name = data.loans.color
-                  this.selectColor.length=0
+                  this.selectColor.length = 0
 
                   this.selectColor.push(obj)
-
                 }
               })
             }
           })
-        }else{
-          this.dataForm={
+        } else {
+          this.dataForm = {
             loanId: '',
             loanName: '',
             loanIconUrl: '',
@@ -310,11 +309,9 @@
             successCount: 0,
             orderNum: '1'
           }
-          this.selectColor.length=0
-          this.selectTab.length=0
+          this.selectColor.length = 0
+          this.selectTab.length = 0
         }
-
-
       },
       getTabDataList () {
         this.$http({
@@ -360,8 +357,8 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            if (this.dataForm.orderNum ==1 && this.selectColor.length > 0) {
-            this.dataForm.color = this.selectColor[0].name
+            if (this.dataForm.orderNum == 1 && this.selectColor.length > 0) {
+              this.dataForm.color = this.selectColor[0].name
             } else {
               this.$message({
                 message: '请选择颜色',
