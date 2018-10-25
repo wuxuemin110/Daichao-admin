@@ -38,6 +38,10 @@
         header-align="center"
         align="center"
         label="首页显示">
+        <template slot-scope="scope">
+          <span v-if="scope.row.recommend== 1">是</span>
+          <span v-if="scope.row.recommend== 0">否</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="level"
@@ -92,6 +96,7 @@
     },
     methods: {
       addOrUpdateHandle(val,flag) {
+        console.log(val)
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(val,flag)

@@ -19,10 +19,10 @@
       </el-form-item>
       <el-form-item label="首页显示" prop="recommend">
         <el-select v-model="dataForm.recommend" placeholder="请选择">
-          <el-option label="是" value="1">
+          <el-option label="是" value='1'>
 
           </el-option >
-          <el-option label="否" value="0">
+          <el-option label="否" value='0'>
 
           </el-option>
         </el-select>
@@ -119,7 +119,7 @@
           this.titleFlag = true;
           this.dataForm.typeName = val.typeName;
           this.dataForm.superTypeId = val.superTypeId;
-          this.dataForm.recommend = val.recommend;
+          this.dataForm.recommend = val.recommend + '';
           this.dataForm.imageUrl = val.picUrl;
           this.dataForm.level = val.level;
           this.dataForm.id = val.typeId;
