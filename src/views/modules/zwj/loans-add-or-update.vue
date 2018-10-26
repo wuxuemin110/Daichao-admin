@@ -374,15 +374,22 @@
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
+          console.log(this.dataForm)
           if (valid) {
-            if (this.dataForm.orderNum == 1 && this.selectColor.length > 0) {
-              this.dataForm.color = this.selectColor[0].name
-            } else {
-              this.$message({
-                message: '请选择颜色',
-                type: 'earning',
-                duration: 1500
-              })
+            if (this.dataForm.orderNum == 1) {
+              if(this.selectColor.length > 0){
+                this.dataForm.color = this.selectColor[0].name
+              } else {
+                this.$message({
+                  message: '请选择颜色',
+                  type: 'earning',
+                  duration: 1500
+                })
+                return false;
+              }
+
+            }else {
+              this.dataForm.color = '#fff'
             }
 
             var data = {}
