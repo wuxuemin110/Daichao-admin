@@ -144,6 +144,24 @@
           this.$message.error('上传头像图片大小不能超过 2MB!')
           return false
         }
+        var _this = this
+        return new Promise(function (resolve, reject) {
+          var reader = new FileReader()
+          reader.onload = function (event) {
+            var image = new Image()
+            image.onload = function () {
+              var width = this.width
+              var height = this.height
+              if (width != 750 || height != 300) {
+                _this.$alert('图片尺寸必须为750*300!', '提示', {confirmButtonText: '确定'})
+                reject()
+              }
+              resolve()
+            }
+            image.src = event.target.result
+          }
+          reader.readAsDataURL(file)
+        })
       },
       // 上传成功
       successHandle (response, file, fileList) {

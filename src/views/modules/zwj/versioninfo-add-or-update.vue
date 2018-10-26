@@ -19,7 +19,7 @@
       </template>
     </el-form-item>
       <el-form-item label="下载地址" prop="updateDesc">
-        <el-input  v-model="dataForm.downloadUrl" maxlength="30" placeholder="版本描述"></el-input>
+        <el-input  v-model="dataForm.downloadUrl" maxlength="30" placeholder="下载地址"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

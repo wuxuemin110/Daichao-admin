@@ -1,8 +1,8 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item label="代超名称">
-        <el-input v-model="dataForm.loanName" placeholder="代超名称" clearable style="width: 150px;"></el-input>
+      <el-form-item label="贷超名称">
+        <el-input v-model="dataForm.loanName" placeholder="贷超名称" clearable style="width: 150px;"></el-input>
       </el-form-item>
       <el-form-item label="点击时间">
         <el-date-picker

@@ -119,7 +119,7 @@
         align="center"
         label="还款金额">
         <template slot-scope="scope">
-          <span>{{scope.row.feeAmount}}元</span>
+          <span>{{scope.row.feeAmount/100 + scope.row.amount}}元</span>
         </template>
       </el-table-column>
       <el-table-column
