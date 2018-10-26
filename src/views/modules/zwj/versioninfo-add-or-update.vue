@@ -108,24 +108,33 @@
       dataFormSubmit () {
         console.log(this.dataForm)
         this.$refs['dataForm'].validate((valid) => {
-          this.$http({
-            url: this.$http.adornUrl('/generation/appVersion/' + (this.dataForm.id ? 'update' : 'save')),
-            method: 'post',
-            params: this.$http.adornParams(this.dataForm)
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              console.log(data)
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            }
-          })
+          var reg = /\d+(\.\d+){0,2}/
+          if (reg.test(this.dataForm.version)) {
+            this.$http({
+              url: this.$http.adornUrl('/generation/appVersion/' + (this.dataForm.id ? 'update' : 'save')),
+              method: 'post',
+              params: this.$http.adornParams(this.dataForm)
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                console.log(data)
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              }
+            })
+          } else {
+            this.$message({
+              message: '版本号格式不正确',
+              type: 'warning',
+              duration: 1500
+            })
+          }
         })
       }
     }

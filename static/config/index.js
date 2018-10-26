@@ -6,7 +6,7 @@
 
   // api接口请求地址
 
-  //window.SITE_CONFIG['baseUrl'] = 'http://192.168.0.123:8080';
+  // window.SITE_CONFIG['baseUrl'] = 'http://192.168.0.123:8080';
   window.SITE_CONFIG['baseUrl'] = 'http://juzi.liulianggame.com:8080/loan-server';
 
   // cdn地址 = 域名 + 版本号
