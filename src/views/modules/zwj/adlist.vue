@@ -37,14 +37,19 @@
           <img :src="scope.row.picUrl" alt="" style="width: 50px;height: 50px">
         </template>
       </el-table-column>
+      <el-table-column
+        prop="app"
+        header-align="center"
+        align="center"
+        label="设备">
+      </el-table-column>
 
-
-
-	  <!--<el-table-column-->
-        <!--prop="successRateTxt"-->
+      <!--<el-table-column-->
+        <!--prop="createTime"-->
         <!--header-align="center"-->
+        <!--:formatter="dateFormat"-->
         <!--align="center"-->
-        <!--label="成功年化文本">-->
+        <!--label="创建时间">-->
       <!--</el-table-column>-->
       <el-table-column
         prop="linkUrl"
@@ -166,7 +171,7 @@
       // 删除
       deleteHandle (item) {
         console.log(item)
-        this.$confirm(`确定对[${item.title}]进行删除批量删除操作?`, '提示', {
+        this.$confirm(`确定对[${item.title}]进行删除操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
