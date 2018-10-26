@@ -173,7 +173,7 @@
       },
       // 删除
       deleteHandle (id) {
-
+        console.log(id)
         var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.bannerId
         })
