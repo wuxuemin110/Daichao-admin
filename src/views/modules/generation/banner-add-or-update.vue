@@ -28,9 +28,9 @@
       <el-form-item label="图标跳转地址">
         <el-input v-model="dataForm.linkUrl"></el-input>
       </el-form-item>
-      <el-form-item label="尺寸">
+     <!-- <el-form-item label="尺寸">
         <el-input v-model="dataForm.screen"></el-input>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="排序">
         <el-input v-model="dataForm.level"></el-input>
       </el-form-item>
@@ -86,7 +86,7 @@
             { required: true, message: '产品名称不能为空', trigger: 'blur' }
           ],
           imageUrl: [
-            { required: true, message: '产品图标不能为空', trigger: 'blur' }
+            { required: true, message: 'banner不能为空', trigger: 'blur' }
           ],
           linkUrl: [
             { required: true, message: '跳转地址不能为空', trigger: 'blur' }
@@ -125,7 +125,7 @@
             this.dataForm.bannerTitle = ''
             this.dataForm.imageUrl = ''
             this.dataForm.linkUrl = ''
-            this.dataForm.screen = ''
+            this.dataForm.screen = 1
             this.dataForm.level =''
             this.dataForm.device = ''
           }

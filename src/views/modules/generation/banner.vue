@@ -49,12 +49,12 @@
         align="center"
         label="排序">
       </el-table-column>
-      <el-table-column
+     <!-- <el-table-column
         prop="screen"
         header-align="center"
         align="center"
         label="尺寸">
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
         prop="linkUrl"
         header-align="center"
