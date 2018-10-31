@@ -48,7 +48,7 @@
         visible: false,
         dataForm: {
           typeName: '',
-          recommend: '0',
+          recommend: '0'
         },
         dataList: [],
         dataRule: {
@@ -61,9 +61,12 @@
     props: ['dataList'],
     methods: {
       init (item) {
-        if(item){
-          this.dataForm = JSON.parse(JSON.stringify(item))
-        }else{
+        if (item) {
+          console.log(item)
+          this.dataForm.typeId = item.typeId
+          this.dataForm.typeName = item.typeName
+          this.dataForm.level = item.level
+        } else {
           this.dataForm = {}
         }
 
@@ -74,10 +77,10 @@
         console.log(this.dataForm)
 
         if (this.dataForm.typeName) {
-          if(!this.dataForm.level){
+          if (!this.dataForm.level) {
             this.dataForm.level = this.dataList[this.dataList.length - 1].level - 0 + 1
           }
-          if(this.dataForm.typeId){
+          if (this.dataForm.typeId) {
             this.dataForm.id = this.dataForm.typeId
           }
           this.dataForm.recommend = 0

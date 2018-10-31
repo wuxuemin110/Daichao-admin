@@ -116,6 +116,15 @@
         <span>{{scope.row.dayRate}}%</span>
       </template>
       </el-table-column>
+      <el-table-column
+        prop="successRate"
+        header-align="center"
+        align="center"
+        label="自动下架阈值">
+        <template slot-scope="scope">
+          <span>{{scope.row.offCount}}次</span>
+        </template>
+      </el-table-column>
 	  <!--<el-table-column-->
         <!--prop="applyCondition"-->
         <!--header-align="center"-->
@@ -160,7 +169,14 @@
           <span v-if="scope.row.status == 0">正常</span>
           <span v-if="scope.row.status == 1">锁定</span>
           <span v-if="scope.row.status == 2">删除</span>
+          <span v-if="scope.row.status == 3">下架</span>
         </template>
+      </el-table-column>
+      <el-table-column
+        prop="level"
+        header-align="center"
+        align="center"
+        label="排序">
       </el-table-column>
       <el-table-column
         fixed="right"

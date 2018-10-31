@@ -3,6 +3,13 @@
     :title="!dataForm.loanId ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
+    <!--<el-dialog title="修改阈值" :visible.sync="innervisible" append-to-body>-->
+      <!--<el-input style="min-width: 200px;"  v-model="dataForm.changeoffCount" maxlength="30" placeholder="自动下架阈值"></el-input>-->
+      <!--<span slot="footer" class="dialog-footer">-->
+      <!--<el-button @click="innervisible = false">取消</el-button>-->
+      <!--<el-button type="primary" @click="change()">确定</el-button>-->
+    <!--</span>-->
+    <!--</el-dialog>-->
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="标题" prop="loanName">
         <el-input v-model="dataForm.loanName" maxlength="30" placeholder="标题"></el-input>
@@ -101,6 +108,10 @@
           <el-input v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input>%
         </el-form-item>
 
+      <el-form-item  label="自动下架阈值" prop="dayRate">
+        <el-input style="min-width: 200px;"  v-model="dataForm.offCount" maxlength="30" placeholder="自动下架阈值"></el-input>次
+        <!--<el-button @click="innervisible = true" style="margin-left: 20px;" plain>修改阈值</el-button>-->
+      </el-form-item>
 
       <!--<el-form-item label="描述" prop="applyCondition">-->
           <!--<el-input v-model="dataForm.applyCondition" maxlength="30" placeholder="描述"></el-input>-->
@@ -112,7 +123,12 @@
       <!--<el-form-item label="申请条件" prop="applyMaterial">-->
           <!--<el-input v-model="dataForm.applyMaterial" maxlength="30" placeholder="申请条件"></el-input>-->
         <!--</el-form-item>-->
-
+      <el-form-item label="状态" >
+        <template>
+          <el-radio v-model="dataForm.status" label="0">上架</el-radio>
+          <el-radio v-model="dataForm.status" label="3">下架</el-radio>
+        </template>
+      </el-form-item>
         <el-form-item label="跳转地址" prop="linkUrl">
           <el-input v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
         </el-form-item>
@@ -158,6 +174,7 @@
         uploadUrl: '',
         iconUrl: '',
         visible: false,
+        innervisible: false,
         dataForm: {
           loanId: '',
           loanName: '',
@@ -171,7 +188,8 @@
           successRate: '',
           dayRate: '',
           successCount: 0,
-          orderNum: '1'
+          orderNum: '1',
+          status: '0'
         },
         dataRule: {
           loanName: [
@@ -237,6 +255,9 @@
       tabClose (tag) {
         this.selectTab.splice(this.selectTab.indexOf(tag), 1)
       },
+      change () {
+
+      },
       init (id) {
         console.log(id, '进入')
         this.uploadUrl = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
@@ -275,6 +296,9 @@
                   this.dataForm.successCount = data.loans.successCount
                   this.dataForm.orderNum = data.loans.orderNum
                   this.dataForm.description = data.loans.description
+                  this.dataForm.status = data.loans.status + ''
+                  this.dataForm.offCount = data.loans.offCount
+                  // this.dataForm.changeoffCount = data.loans.offCount
                   this.selectTab.length = 0
                   data.loanTypeSecond.forEach((n) => {
                     var obj = {}
@@ -307,7 +331,9 @@
             successRate: '',
             dayRate: '',
             successCount: 0,
-            orderNum: '1'
+            orderNum: '1',
+            status: '0',
+            offCount: 10000
           }
           this.selectColor.length = 0
           this.selectTab.length = 0
@@ -377,7 +403,7 @@
           console.log(this.dataForm)
           if (valid) {
             if (this.dataForm.orderNum == 1) {
-              if(this.selectColor.length > 0){
+              if (this.selectColor.length > 0) {
                 this.dataForm.color = this.selectColor[0].name
               } else {
                 this.$message({
@@ -385,10 +411,9 @@
                   type: 'earning',
                   duration: 1500
                 })
-                return false;
+                return false
               }
-
-            }else {
+            } else {
               this.dataForm.color = '#fff'
             }
 
