@@ -50,7 +50,7 @@
           typeName: '',
           recommend: '0'
         },
-        dataList: [],
+
         dataRule: {
           typeName: [
             { required: true, message: '分类名称不能为空', trigger: 'blur' }
@@ -62,7 +62,6 @@
     methods: {
       init (item) {
         if (item) {
-          console.log(item)
           this.dataForm.typeId = item.typeId
           this.dataForm.typeName = item.typeName
           this.dataForm.level = item.level

@@ -25,13 +25,14 @@ const mainRoutes = {
   path: '/',
   component: _import('main'),
   name: 'main',
-  redirect: { name: 'home' },
+  redirect: { name: 'menu' },
   meta: { title: '主入口整体布局' },
   children: [
     // 通过meta对象设置路由展示方式
     // 1. isTab: 是否通过tab展示内容, true: 是, false: 否
     // 2. iframeUrl: 是否通过iframe嵌套展示内容, '以http[s]://开头': 是, '': 否
     // 提示: 如需要通过iframe嵌套展示内容, 但不通过tab打开, 请自行创建组件使用iframe处理!
+    { path: '/sys-menu', component: _import('modules/sys/menu'), name: 'menu', meta: { title: '首页' } },
     { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } },
     { path: '/theme', component: _import('common/theme'), name: 'theme', meta: { title: '主题' } },
     { path: '/demo-echarts', component: _import('demo/echarts'), name: 'demo-echarts', meta: { title: 'demo-echarts', isTab: true } },
