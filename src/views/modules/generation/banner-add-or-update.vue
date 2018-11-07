@@ -80,6 +80,8 @@
           device:'',
           screen:'',
           level:'',
+          companyName: '',
+          selectProduct: {},
         },
         dataRule: {
           bannerTitle: [

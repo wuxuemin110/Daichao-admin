@@ -11,9 +11,18 @@
     <!--</span>-->
     <!--</el-dialog>-->
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
-      <el-form-item label="标题" prop="loanName">
-        <el-input v-model="dataForm.loanName" maxlength="30" placeholder="标题"></el-input>
+      <el-form-item label="公司" >
+        <el-autocomplete
+          v-model="companyName"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请输入内容"
+          @select="handleSelect"
+          @blur = 'reset'
+        ></el-autocomplete>
       </el-form-item>
+      <!--<el-form-item label="标题" prop="loanName">-->
+        <!--<el-input v-model="dataForm.loanName" maxlength="30" placeholder="标题"></el-input>-->
+      <!--</el-form-item>-->
       <el-form-item label="icon图" prop="loanIconUrl">
         <el-upload
           class="avatar-uploader"
@@ -59,14 +68,8 @@
       <el-form-item label="最大金额" prop="maxAmount">
           <el-input v-model="dataForm.maxAmount" maxlength="30" placeholder="最大金额"></el-input>元
 
-        </el-form-item><el-form-item label="最小天数" prop="minDays">
-          <el-input v-model="dataForm.minDays" maxlength="30" placeholder="最小天数"></el-input>天
-
-        </el-form-item><el-form-item label="最大天数" prop="maxDays">
-          <el-input v-model="dataForm.maxDays" maxlength="30" placeholder="最大天数"></el-input>天
-
-        </el-form-item><el-form-item label="成功年化率" prop="successRate">
-          <el-input v-model="dataForm.successRate" maxlength="30" placeholder="成功年化率"></el-input>%
+        </el-form-item><el-form-item label="周期" prop="days">
+          <el-input v-model="dataForm.days" maxlength="30" placeholder="周期"></el-input>天
         </el-form-item>
 
       <el-form-item label="标签" >
@@ -108,21 +111,6 @@
           <el-input v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input>%
         </el-form-item>
 
-      <el-form-item  label="自动下架阈值" prop="dayRate">
-        <el-input style="min-width: 200px;"  v-model="dataForm.offCount" maxlength="30" placeholder="自动下架阈值"></el-input>次
-        <!--<el-button @click="innervisible = true" style="margin-left: 20px;" plain>修改阈值</el-button>-->
-      </el-form-item>
-
-      <!--<el-form-item label="描述" prop="applyCondition">-->
-          <!--<el-input v-model="dataForm.applyCondition" maxlength="30" placeholder="描述"></el-input>-->
-        <!--</el-form-item>-->
-      <!--<el-form-item label="描述2" prop="description">-->
-          <!--<el-input v-model="dataForm.description" maxlength="30" placeholder="描述"></el-input>-->
-        <!--</el-form-item>-->
-
-      <!--<el-form-item label="申请条件" prop="applyMaterial">-->
-          <!--<el-input v-model="dataForm.applyMaterial" maxlength="30" placeholder="申请条件"></el-input>-->
-        <!--</el-form-item>-->
       <el-form-item label="状态" >
         <template>
           <el-radio v-model="dataForm.status" label="0">上架</el-radio>
@@ -130,7 +118,7 @@
         </template>
       </el-form-item>
         <el-form-item label="跳转地址" prop="linkUrl">
-          <el-input v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
+          <el-input disabled v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
         </el-form-item>
             <!--<el-form-item label="序号" prop="linkUrl">-->
           <!--<el-input v-model="dataForm.orderNum" maxlength="250" placeholder="序号"></el-input>-->
@@ -175,6 +163,7 @@
         iconUrl: '',
         visible: false,
         innervisible: false,
+        companyName: '',
         dataForm: {
           loanId: '',
           loanName: '',
@@ -183,8 +172,7 @@
           color: '',
           minAmount: '',
           maxAmount: '',
-          minDays: '',
-          maxDays: '',
+          days: '',
           successRate: '',
           dayRate: '',
           successCount: 0,
@@ -192,9 +180,6 @@
           status: '0'
         },
         dataRule: {
-          loanName: [
-            { required: true, message: '标题名称不能为空', trigger: 'blur' }
-          ],
           loanIconUrl: [
             { required: true, message: '产品图标不能为空', trigger: 'blur' }
           ],
@@ -202,6 +187,7 @@
             { required: true, message: '跳转地址不能为空', trigger: 'blur' }
           ]
         },
+        selectProduct: {},
         tags: [
           {name: '#ffb657'},
           {name: '#4ed6c2'},
@@ -218,6 +204,7 @@
     created () {
       var div = document.getElementById('div1')
       this.getTabDataList()
+
       // this.$http({
       //   url: this.$http.adornUrl('/sys/loanproduct/type/list'),
       //   method: 'get'
@@ -255,6 +242,38 @@
       tabClose (tag) {
         this.selectTab.splice(this.selectTab.indexOf(tag), 1)
       },
+      querySearchAsync (queryString, cb) {
+        this.$http({
+          url: this.$http.adornUrl('/generation/companyProduct/like'),
+          method: 'get',
+          params: this.$http.adornParams({param: queryString || ''})
+        }).then((res) => {
+          if (res.data.code != 0) {
+            this.$message.error(res.data.msg)
+          } else {
+            res.data.companyProducts.forEach(function (n) {
+              n.value = n.companyId + '-' + n.productNum + ' ' + n.productName
+            })
+            console.log(res.data)
+            cb(res.data.companyProducts)
+          }
+        })
+      },
+      handleSelect (item) {
+        console.log(item, this.companyName)
+        this.selectProduct = item
+        this.dataForm.linkUrl = item.linkUrl
+      },
+      reset () {
+        console.log(this.selectProduct)
+        if (this.selectProduct != {}) {
+          if (this.selectProduct.companyId && this.selectProduct.productNum) {
+            this.companyName = this.selectProduct.companyId + '-' + this.selectProduct.productNum + ' ' + this.selectProduct.productName
+          } else {
+            this.companyName = this.selectProduct.productName
+          }
+        }
+      },
       change () {
 
       },
@@ -284,8 +303,7 @@
                   this.dataForm.color = data.loans.color
                   this.dataForm.minAmount = data.loans.minAmount
                   this.dataForm.maxAmount = data.loans.maxAmount
-                  this.dataForm.minDays = data.loans.minDays
-                  this.dataForm.maxDays = data.loans.maxDays
+                  this.dataForm.days = data.loans.days
                   this.dataForm.successRate = data.loans.successRate
                   this.dataForm.successRateTxt = data.loans.successRateTxt
                   this.dataForm.dayRate = data.loans.dayRate
@@ -299,6 +317,10 @@
                   this.dataForm.status = data.loans.status + ''
                   this.dataForm.offCount = data.loans.offCount
                   // this.dataForm.changeoffCount = data.loans.offCount
+                  this.companyName = data.loans.loanName
+                  this.selectProduct.productName = data.loans.loanName
+
+                  this.selectProduct.productId = data.loans.productId
                   this.selectTab.length = 0
                   data.loanTypeSecond.forEach((n) => {
                     var obj = {}
@@ -326,8 +348,7 @@
             color: '',
             minAmount: '',
             maxAmount: '',
-            minDays: '',
-            maxDays: '',
+            days: '',
             successRate: '',
             dayRate: '',
             successCount: 0,
@@ -335,6 +356,8 @@
             status: '0',
             offCount: 10000
           }
+          this.selectProduct = {}
+          this.companyName = ''
           this.selectColor.length = 0
           this.selectTab.length = 0
         }
@@ -351,6 +374,7 @@
           }
         })
       },
+
       // 上传之前
       beforeUploadHandle (file) {
         const isLt2M = file.size / 1024 / 1024 < 2
@@ -416,7 +440,17 @@
             } else {
               this.dataForm.color = '#fff'
             }
-
+            if (this.selectProduct != {}) {
+              this.dataForm.loanName = this.selectProduct.productName
+              this.dataForm.productId = this.selectProduct.productId
+            } else {
+              this.$message({
+                message: '请选择公司',
+                type: 'earning',
+                duration: 1500
+              })
+              return false
+            }
             var data = {}
             data.loans = this.dataForm
             if (this.selectTab.length > 0) {
@@ -435,6 +469,7 @@
                 duration: 1500
               })
             }
+            console.log(data)
             this.$http({
               url: this.$http.adornUrl('/generation/loans/save'),
               method: 'post',

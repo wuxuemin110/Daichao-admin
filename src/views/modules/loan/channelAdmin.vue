@@ -4,9 +4,6 @@
       <el-form-item label="渠道名">
         <el-input v-model="dataForm.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
       </el-form-item>
-      <el-form-item label="销售员">
-        <el-input v-model="dataForm.saleUserName" placeholder="销售员" clearable style="width: 150px;"></el-input>
-      </el-form-item>
       <el-form-item label="添加时间">
         <el-date-picker
           v-model="dataForm.createTime"
@@ -36,6 +33,99 @@
         width="50">
       </el-table-column> -->
       <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="center"
+        width="160"
+        :formatter="dateFormat"
+        label="时间">
+      </el-table-column>
+      <el-table-column
+        prop="channelId"
+        header-align="center"
+        align="center"
+        width="150"
+        label="渠道编号">
+      </el-table-column>
+      <el-table-column
+        prop="channelName"
+        header-align="center"
+        align="center"
+        width="150"
+        label="渠道名">
+      </el-table-column>
+      <el-table-column
+        prop="realRegister"
+        header-align="center"
+        align="center"
+        width="150"
+        label="真实注册数">
+      </el-table-column>
+      <el-table-column
+        prop="showRegister"
+        header-align="center"
+        align="center"
+        width="150"
+        label="显示注册数">
+      </el-table-column>
+      <el-table-column
+        prop="percent"
+        header-align="center"
+        align="center"
+        width="150"
+        label="注册数扣量比例">
+        <template slot-scope="scope">
+          <span>{{scope.row.percent}}%</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        fixed="right"
+        header-align="center"
+        align="center"
+        width="80"
+        label="操作">
+        <template slot-scope="scope">
+           <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle"
+      :current-page="pageIndex"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pageSize"
+      :total="totalPage"
+      layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
+    <!-- 弹窗, 新增 / 修改 -->
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList2"></add-or-update>
+    <!-- 弹窗, 新增 / 修改 -->
+    <add-or-update2 v-if="addOrUpdateVisible2" ref="addOrUpdate2" @refreshDataList="getDataList"></add-or-update2>
+    <el-form :inline="true" :model="dataForm2" @keyup.enter.native="getDataList2()" style="margin-top: 20px;">
+      <el-form-item label="渠道名">
+        <el-input v-model="dataForm2.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList2()">查询</el-button>
+        <!--<el-button v-if="isAuth('sys:channel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
+        <!-- <el-button v-if="isAuth('sys:channel:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button> -->
+      </el-form-item>
+    </el-form>
+    <el-table
+      :data="dataList2"
+      border
+      v-loading="dataListLoading2"
+      @selection-change="selectionChangeHandle"
+      style="width: 100%;">
+      <!--       <el-table-column
+              type="selection"
+              header-align="center"
+              align="center"
+              width="50">
+            </el-table-column> -->
+      <el-table-column
         prop="id"
         header-align="center"
         align="center"
@@ -50,25 +140,17 @@
         label="渠道名">
       </el-table-column>
       <!--<el-table-column-->
-        <!--prop="saleUserName"-->
-        <!--header-align="center"-->
-        <!--align="center"-->
-        <!--width="120"-->
-        <!--label="销售员">-->
+      <!--prop="saleUserName"-->
+      <!--header-align="center"-->
+      <!--align="center"-->
+      <!--width="120"-->
+      <!--label="销售员">-->
       <!--</el-table-column>-->
       <el-table-column
         prop="promotionLink"
         header-align="center"
         align="center"
         label="推广链接">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        width="160"
-        :formatter="dateFormat"
-        label="添加时间">
       </el-table-column>
       <el-table-column
         prop="status"
@@ -87,63 +169,27 @@
         width="80"
         label="操作">
         <template slot-scope="scope">
-           <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button  type="text" size="small" @click="addOrUpdateHandle2(scope.row.id)">修改</el-button>
           <el-button  type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="registCount"
-        header-align="center"
-        align="center"
-        label="用户总数">
-      </el-table-column>
-      <el-table-column
-        prop="activeCount"
-        header-align="center"
-        align="center"
-        label="激活数">
-      </el-table-column>
-      <el-table-column
-        prop="userClickCount"
-        header-align="center"
-        align="center"
-        label="3次及以上点击次数用户数">
-      </el-table-column>
-      <el-table-column
-        prop="loginOnce"
-        header-align="center"
-        align="center"
-        label="次留">
-      </el-table-column>
-      <el-table-column
-        prop="loginThreeTime"
-        header-align="center"
-        align="center"
-        label="3留">
-      </el-table-column>
-      <el-table-column
-        prop="loginSevenTime"
-        header-align="center"
-        align="center"
-        label="7留">
-      </el-table-column>
+
     </el-table>
     <el-pagination
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-      :current-page="pageIndex"
+      @size-change="sizeChangeHandle2"
+      @current-change="currentChangeHandle2"
+      :current-page="pageIndex2"
       :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
+      :page-size="pageSize2"
+      :total="totalPage2"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-    <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './channel-add-or-update'
+  import AddOrUpdate2 from './channelAdmin-add-or-update'
   import { formatDate } from '@/utils/format'
   export default {
     data () {
@@ -157,16 +203,30 @@
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
+        dataForm2: {
+          channelName: null,
+          saleUserName: null,
+          createTime: null
+        },
+        dataList2: [],
+        pageIndex2: 1,
+        pageSize2: 10,
+        totalPage2: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        dataListLoading2: false,
+        dataListSelections2: [],
+        addOrUpdateVisible2: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      AddOrUpdate2
     },
     activated () {
       this.getDataList()
+      this.getDataList2()
     },
     methods: {
       dateFormat (row, column) {
@@ -174,14 +234,14 @@
         if (date === undefined || date == null) {
           return ''
         }
-        return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
+        return formatDate(new Date(date), 'yyyy-MM-dd')
       },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl(`/sys/channel/list`),
-          method: 'get',
+          url: this.$http.adornUrl(`/sys/channel/getRegisterCount`),
+          method: 'POST',
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
@@ -201,6 +261,31 @@
           this.dataListLoading = false
         })
       },
+      // 获取数据列表
+      getDataList2 () {
+        this.dataListLoading2 = true
+        this.$http({
+          url: this.$http.adornUrl(`/sys/channel/list`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page': this.pageIndex2,
+            'limit': this.pageSize2,
+            'channelName': this.dataForm2.channelName,
+            'saleUserName': this.dataForm2.saleUserName,
+            'startTime': this.dataForm2.createTime !== null ? this.dataForm.createTime[0] : null,
+            'endTime': this.dataForm2.createTime !== null ? this.dataForm.createTime[1] + 86400000 : null
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.dataList2 = data.page.list
+            this.totalPage2 = data.page.totalCount
+          } else {
+            this.dataList2 = []
+            this.totalPage2 = 0
+          }
+          this.dataListLoading2 = false
+        })
+      },
       // 每页数
       sizeChangeHandle (val) {
         this.pageSize = val
@@ -212,12 +297,30 @@
         this.pageIndex = val
         this.getDataList()
       },
+      // 每页数
+      sizeChangeHandle2 (val) {
+        this.pageSize2 = val
+        this.pageIndex2 = 1
+        this.getDataList2()
+      },
+      // 当前页
+      currentChangeHandle2 (val) {
+        this.pageIndex2 = val
+        this.getDataList2()
+      },
       // 多选
       selectionChangeHandle (val) {
         this.dataListSelections = val
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
+        this.addOrUpdateVisible2 = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate2.init(id)
+        })
+      },
+      // 新增 / 修改
+      addOrUpdateHandle2 (id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)

@@ -75,30 +75,12 @@
       </template>
       </el-table-column>
 	  <el-table-column
-        prop="minDays"
+        prop="days"
         header-align="center"
         align="center"
-        label="最小天数">
+        label="日期">
       <template slot-scope="scope">
-        <span>{{scope.row.minDays}}天</span>
-      </template>
-      </el-table-column>
-	  <el-table-column
-        prop="maxDays"
-        header-align="center"
-        align="center"
-        label="最大天数">
-      <template slot-scope="scope">
-        <span>{{scope.row.maxDays}}天</span>
-      </template>
-      </el-table-column>
-	  <el-table-column
-        prop="successRate"
-        header-align="center"
-        align="center"
-        label="成功年化">
-      <template slot-scope="scope">
-        <span>{{scope.row.successRate}}%</span>
+        <span>{{scope.row.days}}天</span>
       </template>
       </el-table-column>
 	  <!--<el-table-column-->

@@ -4,6 +4,15 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
+      <el-form-item label="公司" >
+        <el-autocomplete
+          v-model="companyName"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请输入内容"
+          @select="handleSelect"
+          @blur = 'reset'
+        ></el-autocomplete>
+      </el-form-item>
       <el-form-item label="标题" prop="title">
         <el-input v-model="dataForm.title" maxlength="30" placeholder="标题"></el-input>
       </el-form-item>
@@ -24,8 +33,23 @@
           <el-radio v-model="dataForm.app" label="iOS">iOS</el-radio>
         </template>
       </el-form-item>
+      <el-form-item label="状态" >
+        <template>
+          <el-radio v-model="dataForm.status" label="0">上架</el-radio>
+          <el-radio v-model="dataForm.status" label="2">下架</el-radio>
+        </template>
+      </el-form-item>
+      <el-form-item label="持续时间" >
+        <el-date-picker
+          v-model="time"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
         <el-form-item label="跳转地址" prop="linkUrl">
-          <el-input v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
+          <el-input disabled v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
         </el-form-item>
       </el-form>
     <span slot="footer" class="dialog-footer">
@@ -82,12 +106,47 @@
           linkUrl: [
             { required: true, message: '跳转地址不能为空', trigger: 'blur' }
           ]
-        }
+        },
+        companyName: '',
+        selectProduct: {},
+        time: null
       }
     },
     created () {
     },
     methods: {
+      querySearchAsync (queryString, cb) {
+        this.$http({
+          url: this.$http.adornUrl('/generation/companyProduct/like'),
+          method: 'get',
+          params: this.$http.adornParams({param: queryString || ''})
+        }).then((res) => {
+          if (res.data.code != 0) {
+            this.$message.error(res.data.msg)
+          } else {
+            res.data.companyProducts.forEach(function (n) {
+              n.value = n.companyId + '-' + n.productNum + ' ' + n.productName
+            })
+            console.log(res.data)
+            cb(res.data.companyProducts)
+          }
+        })
+      },
+      handleSelect (item) {
+        console.log(item, this.companyName)
+        this.selectProduct = item
+        this.dataForm.linkUrl = item.linkUrl
+      },
+      reset () {
+        console.log(this.selectProduct)
+        if (this.selectProduct != {}) {
+          if (this.selectProduct.companyId && this.selectProduct.productNum) {
+            this.companyName = this.selectProduct.companyId + '-' + this.selectProduct.productNum + ' ' + this.selectProduct.productName
+          } else {
+            this.companyName = this.selectProduct.productName
+          }
+        }
+      },
       init (item) {
         console.log(item, '进入')
         this.uploadUrl = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
@@ -105,6 +164,19 @@
                 console.log(data)
                 if (data && data.code === 0) {
                   this.dataForm = data.openScreenPic
+                  this.dataForm.status = this.dataForm.status + ''
+                  this.selectProduct = {}
+                  this.selectProduct.productId = data.openScreenPic.productId
+                  this.selectProduct.productName = data.openScreenPic.productName
+                  this.selectProduct.productNum = data.openScreenPic.productNum
+                  this.selectProduct.companyId = data.openScreenPic.companyId
+                  this.companyName = data.openScreenPic.companyId + '-' + data.openScreenPic.productNum + ' ' + data.openScreenPic.productName
+                  this.time=[]
+                  this.time[0] = new Date(this.dataForm.showTime)
+                  this.time[1] = new Date(this.dataForm.hideTime)
+                  console.log(this.time)
+                  // document.getElementsByClassName('el-range-input')[0].value=this.dataForm.showTime
+                  // document.getElementsByClassName('el-range-input')[1].value=this.dataForm.showTime
                 }
               })
             }
@@ -114,8 +186,12 @@
             picUrl: '',
             app: 'android',
             title: '',
-            linkUrl: ''
+            linkUrl: '',
+            status: '0'
           }
+          this.selectProduct = {}
+          this.companyName = ''
+          this.time=[]
         }
       },
       // 上传之前
@@ -166,8 +242,31 @@
 
       // 表单提交
       dataFormSubmit () {
-        console.log(this.dataForm)
+        console.log(this.time)
+
         this.$refs['dataForm'].validate((valid) => {
+          if (this.selectProduct.productId) {
+            this.dataForm.loanName = this.selectProduct.productName
+            this.dataForm.productId = this.selectProduct.productId
+          } else {
+            this.$message({
+              message: '请选择公司',
+              type: 'earning',
+              duration: 1500
+            })
+            return false
+          }
+          this.dataForm.showTime = this.time[0].getTime()
+          this.dataForm.hideTime = this.time[1].getTime()
+          if (!this.dataForm.showTime || !this.dataForm.hideTime) {
+            this.$message({
+              message: '请选择时间段',
+              type: 'earning',
+              duration: 1500
+            })
+            return false
+          }
+
           this.$http({
             url: this.$http.adornUrl('/generation/openScreen/' + (this.dataForm.id ? 'update' : 'save')),
             method: 'post',

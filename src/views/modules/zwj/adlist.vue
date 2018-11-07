@@ -23,6 +23,14 @@
         <!--width="50">-->
       <!--</el-table-column>-->
       <el-table-column
+        header-align="center"
+        align="center"
+        label="产品编号">
+        <template slot-scope="scope">
+          <span>{{scope.row.companyId + '-' + scope.row.productNum }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="title"
         header-align="center"
         align="center"
@@ -43,7 +51,22 @@
         align="center"
         label="设备">
       </el-table-column>
-
+      <el-table-column
+        prop="showTime"
+        header-align="center"
+        align="center"
+        width="180"
+        :formatter="dateFormat"
+        label="开始时间">
+      </el-table-column>
+      <el-table-column
+        prop="hideTime"
+        header-align="center"
+        align="center"
+        width="180"
+        :formatter="dateFormat"
+        label="结束时间">
+      </el-table-column>
       <!--<el-table-column-->
         <!--prop="createTime"-->
         <!--header-align="center"-->
@@ -58,6 +81,16 @@
         label="跳转地址">
       </el-table-column>
       <el-table-column
+        prop="status"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status==0">上架</span>
+          <span v-if="scope.row.status==2">下架</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         fixed="right"
         header-align="center"
         align="center"
@@ -65,7 +98,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>
-          <el-button type="text" v-if="scope.row.status != 2" size="small" @click="deleteHandle(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
