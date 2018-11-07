@@ -1,13 +1,16 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item label="贷超名称">
-        <el-input v-model="dataForm.loanName" placeholder="贷超名称" clearable style="width: 150px;"></el-input>
+      <el-form-item>
+        <el-input v-model="dataForm.productName" placeholder="产品名称查询" clearable></el-input>
       </el-form-item>
-      <el-form-item label="点击时间">
+      <el-form-item>
+        <el-input v-model="dataForm.productDisplayNum" placeholder="产品编号查询" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="日期" >
         <el-date-picker
           unlink-panels
-          v-model="dataForm.createTime"
+          v-model="dataForm.date"
           type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="至"
@@ -17,7 +20,6 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <!--<el-button v-if="isAuth('sys:channel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
 
       </el-form-item>
     </el-form>
@@ -25,38 +27,49 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
-
       style="width: 100%;">
 
       <el-table-column
-        prop="date"
-        v-if="isTrue"
+        prop="productDisplayNum"
         header-align="center"
         align="center"
-        width="100"
-        label="日期">
+        label="产品编号">
       </el-table-column>
       <el-table-column
-        prop="loanTitle"
+        prop="productName"
         header-align="center"
         align="center"
-        width="150"
-        label="代超名称">
+        label="产品名字">
+      </el-table-column>
+
+      <el-table-column
+        prop="recharge"
+        header-align="center"
+        align="center"
+
+        label="充值金额">
       </el-table-column>
       <el-table-column
-        prop="count"
+        prop="balance"
         header-align="center"
         align="center"
-        width="120"
-        label="点击次数">
+
+        label="余额">
       </el-table-column>
       <el-table-column
-        prop="completeCount"
+        prop="totalRecharge"
         header-align="center"
         align="center"
-        width="120"
-        label="加载完成次数">
+
+        label="总充值">
       </el-table-column>
+      <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="center"
+        label="创建时间">
+      </el-table-column>
+
     </el-table>
     <el-pagination
       @size-change="sizeChangeHandle"
@@ -67,27 +80,32 @@
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
+
   </div>
 </template>
 
 <script>
+
   import { formatDate } from '@/utils/format'
   export default {
     data () {
       return {
         dataForm: {
-          loanName: null,
-          createTime: null
+          productName: null,
+          productDisplayNum:null,
+          date:null
         },
-        isTrue: false,
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
-        dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        dataListSelections:[]
       }
+    },
+    components: {
+
     },
     activated () {
       this.getDataList()
@@ -103,26 +121,22 @@
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        if (this.dataForm.createTime === undefined || this.dataForm.createTime === null) {
-          this.isTrue = true
-        } else {
-          this.isTrue = false
-        }
-
         this.$http({
-          url: this.$http.adornUrl(`/generation/clickloans/all/list`),
+          url: this.$http.adornUrl(`/generation/companyRecharge/list`),
           method: 'get',
           params: this.$http.adornParams({
+            'token': this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'loanName': this.dataForm.loanName,
-            'startTime': this.dataForm.createTime !== null ? this.dataForm.createTime[0] : null,
-            'endTime': this.dataForm.createTime !== null ? this.dataForm.createTime[1] : null
+            'productName': this.dataForm.productName || null,
+            'productDisplayNum':this.dataForm.productDisplayNum || null,
+            'startDate':this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate':this.dataForm.date !== null ? this.dataForm.date[1] : null,
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
+            this.dataList = data.companyProductRecharges
+            this.totalPage = data.totalCount
           } else {
             this.dataList = []
             this.totalPage = 0
@@ -140,6 +154,45 @@
       currentChangeHandle (val) {
         this.pageIndex = val
         this.getDataList()
+      },
+
+      // 新增 / 修改
+      addOrUpdateHandle (item) {
+
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate.init(item)
+        })
+      },
+      // 删除
+      deleteHandle (id) {
+        this.$confirm(`确定要删除吗?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/generation/companyInfo/delete'),
+            method: 'post',
+            params: this.$http.adornParams({
+              'token':this.$cookie.get('token'),
+              'companyId':id,
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        })
       }
     }
   }
