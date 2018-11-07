@@ -1,7 +1,7 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item label="渠道名">
+      <el-form-item  v-if="isAuth('loan:channel:list')" label="渠道名">
         <el-input v-model="dataForm.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
       </el-form-item>
       <el-form-item label="添加时间">
@@ -17,6 +17,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('sys:channel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('loan:channel:user')" type="primary" @click="addOrUpdateHandle3()">新增后台管理员</el-button>
         <!-- <el-button v-if="isAuth('sys:channel:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button> -->
       </el-form-item>
     </el-form>
@@ -25,7 +26,7 @@
       border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
-      style="width: 100%;">
+      >
 <!--       <el-table-column
         type="selection"
         header-align="center"
@@ -36,7 +37,7 @@
         prop="createTime"
         header-align="center"
         align="center"
-        width="160"
+
         :formatter="dateFormat"
         label="时间">
       </el-table-column>
@@ -44,7 +45,7 @@
         prop="channelId"
         header-align="center"
         align="center"
-        width="150"
+
         label="渠道编号">
       </el-table-column>
       <el-table-column
@@ -55,24 +56,25 @@
         label="渠道名">
       </el-table-column>
       <el-table-column
+        v-if="isAuth('loan:channel:listInfo')"
         prop="realRegister"
         header-align="center"
         align="center"
-        width="150"
+
         label="真实注册数">
       </el-table-column>
       <el-table-column
         prop="showRegister"
         header-align="center"
         align="center"
-        width="150"
+
         label="显示注册数">
       </el-table-column>
       <el-table-column
         prop="percent"
         header-align="center"
         align="center"
-        width="150"
+        v-if="isAuth('loan:channel:listInfo')"
         label="注册数扣量比例">
         <template slot-scope="scope">
           <span>{{scope.row.percent}}%</span>
@@ -80,13 +82,13 @@
       </el-table-column>
 
       <el-table-column
-        fixed="right"
+        v-if="isAuth('loan:channel:listInfo')"
         header-align="center"
         align="center"
         width="80"
         label="操作">
         <template slot-scope="scope">
-           <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -103,7 +105,9 @@
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList2"></add-or-update>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update2 v-if="addOrUpdateVisible2" ref="addOrUpdate2" @refreshDataList="getDataList"></add-or-update2>
-    <el-form :inline="true" :model="dataForm2" @keyup.enter.native="getDataList2()" style="margin-top: 20px;">
+    <!-- 弹窗, 新增 / 修改 -->
+    <add-or-update3 v-if="addOrUpdateVisible3" ref="addOrUpdate3" @refreshDataList="getDataList"></add-or-update3>
+    <el-form  v-if="isAuth('loan:channel:list')" :inline="true" :model="dataForm2" @keyup.enter.native="getDataList2()" style="margin-top: 20px;">
       <el-form-item label="渠道名">
         <el-input v-model="dataForm2.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
       </el-form-item>
@@ -114,6 +118,7 @@
       </el-form-item>
     </el-form>
     <el-table
+      v-if="isAuth('loan:channel:list')"
       :data="dataList2"
       border
       v-loading="dataListLoading2"
@@ -176,6 +181,7 @@
 
     </el-table>
     <el-pagination
+      v-if="isAuth('loan:channel:list')"
       @size-change="sizeChangeHandle2"
       @current-change="currentChangeHandle2"
       :current-page="pageIndex2"
@@ -190,6 +196,7 @@
 <script>
   import AddOrUpdate from './channel-add-or-update'
   import AddOrUpdate2 from './channelAdmin-add-or-update'
+  import AddOrUpdate3 from './channelAdmin-user-add-or-update'
   import { formatDate } from '@/utils/format'
   export default {
     data () {
@@ -217,12 +224,14 @@
         addOrUpdateVisible: false,
         dataListLoading2: false,
         dataListSelections2: [],
-        addOrUpdateVisible2: false
+        addOrUpdateVisible2: false,
+        addOrUpdateVisible3: false
       }
     },
     components: {
       AddOrUpdate,
-      AddOrUpdate2
+      AddOrUpdate2,
+      AddOrUpdate3
     },
     activated () {
       this.getDataList()
@@ -324,6 +333,13 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // 新增 / 修改
+      addOrUpdateHandle3 (id) {
+        this.addOrUpdateVisible3 = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate3.init(id)
         })
       },
       // 删除
