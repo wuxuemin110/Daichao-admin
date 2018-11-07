@@ -25,12 +25,21 @@
           <el-option label="android" value="android"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="图标跳转地址">
-        <el-input v-model="dataForm.linkUrl"></el-input>
+      <el-form-item label="产品名称">
+        <div>
+          <el-autocomplete
+            v-model="productId"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请输入内容"
+            @select="handleSelect"
+          ></el-autocomplete>
+        </div>
       </el-form-item>
-     <!-- <el-form-item label="尺寸">
-        <el-input v-model="dataForm.screen"></el-input>
-      </el-form-item>-->
+
+      <el-form-item label="状态">
+        <el-radio v-model="dataForm.status" label="0">上架</el-radio>
+        <el-radio v-model="dataForm.status" label="1">下架</el-radio>
+      </el-form-item>
       <el-form-item label="排序">
         <el-input v-model="dataForm.level"></el-input>
       </el-form-item>
@@ -70,9 +79,11 @@
   export default {
     data () {
       return {
+        productId:'',
         uploadUrl: '',
         iconUrl: '',
         visible: false,
+        productList:[],
         dataForm: {
           imageUrl: '',
           bannerTitle: '',
@@ -80,7 +91,10 @@
           device:'',
           screen:'',
           level:'',
+          status:'',
+          productId:''
         },
+        timeout:  null,
         dataRule: {
           bannerTitle: [
             { required: true, message: '产品名称不能为空', trigger: 'blur' }
@@ -93,6 +107,9 @@
           ]
         }
       }
+    },
+    created(){
+      //this.getCompanyfuzzy();
     },
     methods: {
       init (id) {
@@ -118,6 +135,9 @@
                 this.dataForm.screen = data.banner.screen
                 this.dataForm.level = data.banner.level
                 this.dataForm.device = data.banner.device
+                this.dataForm.status = data.banner.status +''
+                this.productId = data.banner.productName
+                this.dataForm.productId = data.banner.productId
               }
             })
           }else {
@@ -128,6 +148,9 @@
             this.dataForm.screen = 1
             this.dataForm.level =''
             this.dataForm.device = ''
+            this.dataForm.status = ''
+            this.dataForm.productId = ''
+            this.productId = ''
           }
         })
       },
@@ -184,7 +207,8 @@
                 'device': this.dataForm.device,
                 'screen': this.dataForm.screen,
                 'level': this.dataForm.level,
-                'status':0
+                'status':this.dataForm.status + '',
+                'productId':this.dataForm.productId
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
@@ -203,6 +227,37 @@
             })
           }
         })
+      },
+
+      //公司产品模糊查询
+      getCompanyfuzzy(){
+        return this.$http({
+          url: this.$http.adornUrl(`/generation/companyProduct/like`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'token':this.$cookie.get('token'),
+            'param':this.productId
+
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+             this.productList = data.companyProducts
+              for(var i = 0;i<this.productList.length;i++){
+                 this.productList[i]['value'] = this.productList[i].productName
+              }
+              return Promise.resolve(this.productList)
+          }
+        })
+      },
+      querySearchAsync(queryString, cb) {
+        this.getCompanyfuzzy().then((res)=>{
+          var restaurants = res;
+          cb(restaurants);
+        })
+      },
+      handleSelect(item) {
+        this.dataForm.productId = item.productId
+        this.dataForm.linkUrl = item.linkUrl
       }
     }
   }

@@ -1,11 +1,18 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-
       <el-form-item>
-
+        <el-input v-model="dataForm.companyId" placeholder="输入公司ID查询" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.companyName" placeholder="输入公司名字查询" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.productName" placeholder="输入产品名字查询" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('generation:banner:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-     <!--   <el-button v-if="isAuth('generation:banner:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
     </el-form>
     <el-table
@@ -16,59 +23,64 @@
       style="width: 100%;">
 
       <el-table-column
-
+        prop="companyId"
+        header-align="center"
+        align="center"
+        label="公司编号">
+      </el-table-column>
+      <el-table-column
         header-align="center"
         align="center"
         label="产品编号">
-
         <template slot-scope="scope">
           <span>{{  `${scope.row.companyId}-${scope.row.productNum}` }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="bannerTitle"
+        prop="createTime"
         header-align="center"
         align="center"
-        label="标题">
+        :formatter="dateFormat"
+        label="时间">
       </el-table-column>
       <el-table-column
-        prop="imageUrl"
+        prop="companyName"
         header-align="center"
         align="center"
-        label="banner">
-        <template slot-scope="scope">
-          <img :src="scope.row.imageUrl" alt="" style="width: 50px;height: 50px">
-        </template>
+        label="公司名称">
       </el-table-column>
-      <el-table-column
-        prop="device"
-        header-align="center"
-        align="center"
-        label="终端设备标识">
-      </el-table-column>
-      <el-table-column
-        prop="level"
-        header-align="center"
-        align="center"
-        label="排序">
-      </el-table-column>
-      <el-table-column
-        prop="status"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-           <span v-if="scope.row.status == 0">正常</span>
-          <span v-if="scope.row.status == 1">已下架</span>
-        </template>
 
+      <el-table-column
+        prop="productName"
+        header-align="center"
+        align="center"
+        label="产品名称">
       </el-table-column>
       <el-table-column
         prop="linkUrl"
         header-align="center"
         align="center"
-        label="跳转地址">
+        label="链接">
       </el-table-column>
+      <el-table-column
+        prop="price"
+        header-align="center"
+        align="center"
+        label="单价">
+      </el-table-column>
+      <el-table-column
+        prop="contactName"
+        header-align="center"
+        align="center"
+        label="对接人">
+      </el-table-column>
+      <el-table-column
+        prop="contactMobile"
+        header-align="center"
+        align="center"
+        label="联系方式">
+      </el-table-column>
+
       <el-table-column
         fixed="right"
         header-align="center"
@@ -76,8 +88,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.bannerId)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.bannerId)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.productId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,13 +108,15 @@
 </template>
 
 <script>
-  import AddOrUpdate from './banner-add-or-update'
+  import AddOrUpdate from './customer-add-or-delete'
   import { formatDate } from '@/utils/format'
   export default {
     data () {
       return {
         dataForm: {
-          bannerTitle: ''
+          companyId: null,
+          companyName:null,
+          productName:null
         },
         dataList: [],
         pageIndex: 1,
@@ -120,13 +134,6 @@
       this.getDataList()
     },
     methods: {
-      fromatAmount (row, column) {
-        var amount = row[column.property]
-        if (amount === undefined || amount == null) {
-          return ''
-        }
-        return amount / 100
-      },
       dateFormat (row, column) {
         var date = row[column.property]
         if (date === undefined || date == null) {
@@ -138,17 +145,20 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl(`/generation/banner/list`),
+          url: this.$http.adornUrl(`/generation/companyProduct/list`),
           method: 'get',
           params: this.$http.adornParams({
+            'token':this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'name': this.dataForm.name
+            'companyId': this.dataForm.companyId || null,
+            'companyName':this.dataForm.companyName || null,
+            'productName':this.dataForm.productName || null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
+            this.dataList = data.companyProducts
+            this.totalPage = data.totalCount
           } else {
             this.dataList = []
             this.totalPage = 0
@@ -177,20 +187,18 @@
       },
       // 删除
       deleteHandle (id) {
-
-        var ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.bannerId
-        })
-        console.log(ids)
-        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        this.$confirm(`确定要删除吗？`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/generation/banner/delete'),
+            url: this.$http.adornUrl('/generation/companyProduct/delete'),
             method: 'post',
-            data: this.$http.adornData(ids, false)
+            params:this.$http.adornParams({
+              'token':this.$cookie.get('token'),
+              'productIds':id
+            })
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({
