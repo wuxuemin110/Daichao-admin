@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('generation:banner:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('generation:accounts:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
     <el-table

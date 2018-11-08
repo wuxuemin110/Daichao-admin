@@ -141,7 +141,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/generation/version/del'),
+            url: this.$http.adornUrl('/sys/loanproduct/type/del'),
             method: 'post',
             params: this.$http.adornParams({
               typeId:id,

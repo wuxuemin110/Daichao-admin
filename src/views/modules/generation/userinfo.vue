@@ -2,13 +2,35 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.mobilePhone" placeholder="手机号码" clearable></el-input>
+        <el-input v-model="dataForm.mobile" placeholder="用户名" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model="dataForm.channelId" placeholder="请选择渠道名字">
+          <el-option
+            v-for="item in selectList"
+            :key="item.id"
+            :label="item.channelName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!--<el-form-item>
+        <el-input v-model="dataForm.channelId" placeholder="渠道id" clearable></el-input>
+      </el-form-item>-->
+      <el-form-item>
+        <el-input v-model="dataForm.deviceSource" placeholder="设备" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.market" placeholder="下载途径" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.appName" placeholder="app名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button  v-if="isAuth('generation:userinfo:list')" type="primary">导出列表</el-button>
+        <el-button  v-loading.fullscreen.lock="fullscreenLoading"  @click="Download()"  v-if="isAuth('generation:userinfo:list')" type="primary">导出列表</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -28,7 +50,6 @@
         prop="channelName"
         header-align="center"
         align="center"
-
         label="注册渠道">
       </el-table-column>
       <el-table-column
@@ -66,6 +87,7 @@
         prop="lastLoginTime"
         header-align="center"
         align="center"
+        :formatter="dateFormat"
         label="最近一次登陆时间">
       </el-table-column>
       <el-table-column
@@ -102,15 +124,20 @@
     data () {
       return {
         dataForm: {
-          mobilePhone: ''
+          mobile:'',//用户名
+          channelId:'',//渠道id
+          deviceSource:'',//设备
+          appName:'',//app名称
+          market:''
         },
+        fullscreenLoading: false,
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
-
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        selectList:[]
       }
     },
     components: {
@@ -118,6 +145,7 @@
     },
     activated () {
       this.getDataList()
+      this.channelList()
     },
     methods: {
       fromatAmount (row, column) {
@@ -143,18 +171,33 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'name': this.dataForm.name
+            'mobile':this.dataForm.mobile,
+            'channelId':this.dataForm.channelId,
+            'deviceSource':this.dataForm.deviceSource,
+            'appName':this.dataForm.appName,
+            'market':this.dataForm.market
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
+            /*var selectList = []
+            for(var i= 0;i<data.page.list.length;i++){
+              if(data.page.list[i].channelId != null){
+                selectList.push(data.page.list[i])
+              }
+            }
+            this.selectList = this.arrayUnique(selectList,'channelName')*/
+
           } else {
             this.dataList = []
             this.totalPage = 0
           }
           this.dataListLoading = false
         })
+      },
+      Download(){
+        window.location.href =this.$http.adornUrl(`/sys/report/userInfoReportDownload?token=${this.$cookie.get('token')}&mobile=${this.dataForm.mobile}&channelId=${this.dataForm.channelId}&deviceSource=${this.dataForm.deviceSource}&appName=${this.dataForm.appName}&market=${this.dataForm.market}`)
       },
       // 每页数
       sizeChangeHandle (val) {
@@ -167,14 +210,20 @@
         this.pageIndex = val
         this.getDataList()
       },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        this.addOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+      channelList () {
+        this.$http({
+          url: this.$http.adornUrl(`/sys/channel/list`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page':1,
+            'limit': 999,
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.selectList = data.page.list
+          }
         })
       }
-
     }
   }
 </script>

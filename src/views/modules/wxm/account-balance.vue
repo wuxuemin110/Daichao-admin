@@ -152,7 +152,8 @@
                 'settedRegistered':this.dataForm.settedRegistered,
                 'totalRecharge':this.dataForm.totalRecharge,
                 'settedCount':this.dataForm.price * this.dataForm.settedRegistered,
-                'status':1
+                'status':1,
+                'createTime':this.dataForm.date
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
