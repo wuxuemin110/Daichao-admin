@@ -223,7 +223,6 @@
       },
       getTab (item, item2) {
         var obj = Object.assign({superTypeId: item2.typeId}, item)
-        // for
         var index2 = this.selectTab.findIndex((value, index3, arr) => {
           console.log(item2.typeId)
           return value.superTypeId == item2.typeId
