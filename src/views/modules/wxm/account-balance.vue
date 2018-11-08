@@ -45,10 +45,10 @@
       <el-form-item label="累计点击数" >
         <el-input   :disabled="true" v-model="dataForm.clickComplete" maxlength="30" placeholder="累计点击数"></el-input>
       </el-form-item>
-      <el-form-item label="注册转化率" >
+     <!-- <el-form-item label="注册转化率" >
         <el-input style="width: 80%"  :disabled="true" v-model="dataForm.conversionRate" maxlength="30" placeholder="注册转化率"></el-input>
         %
-      </el-form-item>
+      </el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -70,7 +70,7 @@
           clickComplete:'',//累计点击数
           price:'',//单价
           settedRegistered:'',//结算注册数
-          conversionRate:'',//注册转化率
+          //conversionRate:'',//注册转化率
           productDisplayNum:'',//产品编号
           productName:'',//产品名字
           totalRecharge:'',//总充值
@@ -118,11 +118,11 @@
           }).then(({data})=>{
             if (data && data.code === 0){
               this.dataForm.clickComplete = data.clickComplete
-              if(this.dataForm.clickComplete == 0){
+             /* if(this.dataForm.clickComplete == 0){
                 this.dataForm.conversionRate = 0
               }else {
                 this.dataForm.conversionRate = (this.dataForm.settedRegistered/this.dataForm.clickComplete)*100
-              }
+              }*/
 
             }else {
               this.$message.error(data.msg)
@@ -145,7 +145,7 @@
               params: this.$http.adornParams({
                 'token':this.$cookie.get('token'),
                 'productId':this.dataForm.productId,
-                'conversionRate':this.dataForm.conversionRate,
+                //'conversionRate':this.dataForm.conversionRate,
                 'totalRecharge':this.dataForm.totalRecharge,
                 'price':this.dataForm.price,
                 'clickComplete':this.dataForm.clickComplete,
