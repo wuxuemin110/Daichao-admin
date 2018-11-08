@@ -22,6 +22,11 @@
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
       </el-form-item>
+      <el-form-item label="角色" size="mini" prop="roleIdList">
+
+          <el-radio v-model="dataForm.channelId" v-for="role in channelList" :key="role.channelId" :label="role.channelId">{{ role.channelName }}</el-radio>
+
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -33,6 +38,7 @@
 <script>
   import { isEmail, isMobile } from '@/utils/validate'
   export default {
+    props: ['channelList'],
     data () {
       var validatePassword = (rule, value, callback) => {
         if (!this.dataForm.id && !/\S/.test(value)) {
@@ -77,7 +83,8 @@
           realName: '',
           mobile: '',
           roleIdList: [10],
-          status: 1
+          status: 1,
+          channelId: 0
         },
         dataRule: {
           userName: [
@@ -140,7 +147,15 @@
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
-          console.log(this.dataForm)
+          if (this.dataForm.channelId == 0) {
+            this.$message({
+              message: '请选择渠道',
+              type: 'earning',
+              duration: 1500
+
+            })
+            return false
+          }
           if (valid) {
             this.$http({
               url: this.$http.adornUrl(`/sys/user/${!this.dataForm.id ? 'save' : 'update'}`),
@@ -154,7 +169,8 @@
                 'realName': this.dataForm.realName,
                 'mobile': this.dataForm.mobile,
                 'status': this.dataForm.status,
-                'roleIdList': this.dataForm.roleIdList
+                'roleIdList': this.dataForm.roleIdList,
+                'channelId': this.dataForm.channelId
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

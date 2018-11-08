@@ -201,7 +201,7 @@
             method: 'post',
             params:this.$http.adornParams({
               'token':this.$cookie.get('token'),
-              'productIds':id
+              'productId':id
             })
           }).then(({data}) => {
             if (data && data.code === 0) {

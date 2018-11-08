@@ -16,13 +16,6 @@
       <el-form-item label="单日点击上限" prop="clickLimit">
         <el-input v-model="dataForm.clickLimit" maxlength="30" placeholder="单日点击上限"></el-input>
       </el-form-item>
-      <el-form-item label="状态"  prop="status" >
-        <template>
-          <el-radio v-model="status" label="0">上架</el-radio>
-          <!--<el-radio v-model="dataForm.status" label="1">自动下架</el-radio>-->
-          <el-radio v-model="status" label="2">手动下架</el-radio>
-        </template>
-      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -38,9 +31,7 @@
       return {
         visible: false,
         dataForm: {
-          status: '0'
         },
-        status: '0',
         options: [],
         dataRule: {
           adjustClick: [
@@ -69,7 +60,6 @@
               this.dataForm.id = data.companyProductConsume.id
               this.dataForm.productDisplayNum = data.companyProduct.productDisplayNum
               this.dataForm.productName = data.companyProduct.productName
-              this.status = data.companyProduct.status ? data.companyProduct.status+'': '0'
               this.dataForm.adjustClick = data.companyProductConsume.adjustClick-0
               this.dataForm.clickLimit = data.companyProductConsume.clickLimit-0
               console.log(this.dataForm)
@@ -87,15 +77,13 @@
             if(!this.dataForm.clickLimit || this.dataForm.clickLimit==0){
               this.dataForm.clickLimit = -1
             }
-            this.dataForm.status = this.status
             this.$http({
               url: this.$http.adornUrl(`/generation/companyProduct/consume/update`),
               method: 'post',
               params: this.$http.adornParams({
                 'id': this.dataForm.id,
                 'adjustClick': this.dataForm.adjustClick,
-                'clickLimit': this.dataForm.clickLimit,
-                'status' : this.status
+                'clickLimit': this.dataForm.clickLimit
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

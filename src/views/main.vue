@@ -44,6 +44,10 @@
       userName: {
         get () { return this.$store.state.user.name },
         set (val) { this.$store.commit('user/updateName', val) }
+      },
+      userChannelId: {
+        get () { return this.$store.state.user.channelId },
+        set (val) { this.$store.commit('user/updateChannelId', val) }
       }
     },
     created () {
@@ -71,6 +75,7 @@
             this.loading = false
             this.userId = data.user.userId
             this.userName = data.user.username
+            this.userChannelId = data.user.channelId
           }
         })
       }
