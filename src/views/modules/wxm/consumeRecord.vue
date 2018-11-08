@@ -35,6 +35,12 @@
         label="产品名称">
       </el-table-column>
       <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="center"
+        label="操作时间">
+      </el-table-column>
+      <el-table-column
         prop="sumClickComplete"
         header-align="center"
         align="center"
@@ -83,22 +89,28 @@
         label="剩余点击数">
       </el-table-column>
       <el-table-column
+        prop="adjustClick"
+        header-align="center"
+        align="center"
+        label="调整点击数">
+      </el-table-column>
+      <el-table-column
         prop="clickLimit"
         header-align="center"
         align="center"
         label="单日点击上限">
       </el-table-column>
-      <el-table-column
-        fixed="right"
-        header-align="center"
-        align="center"
-        width="150"
-        label="操作">
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>
-          <!--<el-button type="text" size="small" @click="deleteHandle(scope.row.productId)">删除</el-button>-->
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--fixed="right"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--width="150"-->
+        <!--label="操作">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-button type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>-->
+          <!--&lt;!&ndash;<el-button type="text" size="small" @click="deleteHandle(scope.row.productId)">删除</el-button>&ndash;&gt;-->
+        <!--</template>-->
+      <!--</el-table-column>-->
     </el-table>
     <el-pagination
       @size-change="sizeChangeHandle"
@@ -152,19 +164,16 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl(`/generation/companyProduct/consume/list`),
+          url: this.$http.adornUrl(`/generation/companyProduct/consume/backup/list`),
           method: 'get',
           params: this.$http.adornParams({
             'token':this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'companyId': this.dataForm.companyId || null,
-            'companyName':this.dataForm.companyName || null,
-            'productName':this.dataForm.productName || null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.companyProductConsumes
+            this.dataList = data.companyProductConsumeBackups
             this.totalPage = data.totalCount
           } else {
             this.dataList = []

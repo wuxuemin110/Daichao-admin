@@ -106,7 +106,7 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update2 v-if="addOrUpdateVisible2" ref="addOrUpdate2" @refreshDataList="getDataList"></add-or-update2>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update3 v-if="addOrUpdateVisible3" ref="addOrUpdate3" @refreshDataList="getDataList"></add-or-update3>
+    <add-or-update3 v-if="addOrUpdateVisible3" :channelList="dataList" ref="addOrUpdate3" @refreshDataList="getDataList"></add-or-update3>
     <el-form  v-if="isAuth('loan:channel:list')" :inline="true" :model="dataForm2" @keyup.enter.native="getDataList2()" style="margin-top: 20px;">
       <el-form-item label="渠道名">
         <el-input v-model="dataForm2.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
@@ -234,8 +234,23 @@
       AddOrUpdate3
     },
     activated () {
-      this.getDataList()
       this.getDataList2()
+      console.log(this.$store.state.user.channelId)
+      if (this.$store.state.user.channelId) {
+        this.$http({
+          url: this.$http.adornUrl(`/sys/channel/selectOneById`),
+          method: 'get',
+          params: this.$http.adornParams({channelId: this.$store.state.user.channelId})
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.dataForm.channelName = data.channelRegisterEntity.channelName
+            console.log(this.dataForm.channelName)
+            this.getDataList()
+          }
+        })
+      } else {
+        this.getDataList()
+      }
     },
     methods: {
       dateFormat (row, column) {
