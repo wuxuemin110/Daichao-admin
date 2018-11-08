@@ -6,7 +6,7 @@
       <!--</el-form-item>-->
       <el-form-item>
         <!--<el-button @click="getDataList()">查询</el-button>-->
-        <el-button  v-if="isAuth('zwj:loans:add')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button  v-if="isAuth('generation:loans:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <!--<el-button v-if="isAuth('generation:loans:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
     </el-form>
@@ -167,8 +167,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button  v-if="isAuth('zwj:loans:edit')"  type="text" size="small" @click="addOrUpdateHandle(scope.row.loanId)">修改</el-button>
-          <el-button  v-if="isAuth('zwj:loans:del') && scope.row.status != 2"  type="text"  size="small" @click="deleteHandle(scope.row)">删除</el-button>
+          <el-button  v-if="isAuth('generation:loans:update')"  type="text" size="small" @click="addOrUpdateHandle(scope.row.loanId)">修改</el-button>
+          <el-button  v-if="isAuth('generation:loans:delete') && scope.row.status != 2"  type="text"  size="small" @click="deleteHandle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

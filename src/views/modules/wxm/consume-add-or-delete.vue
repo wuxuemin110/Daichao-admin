@@ -20,7 +20,7 @@
         <template>
           <el-radio v-model="status" label="0">上架</el-radio>
           <!--<el-radio v-model="dataForm.status" label="1">自动下架</el-radio>-->
-          <el-radio v-model="status" label="2">手动下架</el-radio>
+          <el-radio v-model="status" label="4">手动下架</el-radio>
         </template>
       </el-form-item>
     </el-form>

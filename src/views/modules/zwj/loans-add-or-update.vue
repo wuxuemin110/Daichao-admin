@@ -38,30 +38,12 @@
       <!--<el-form-item label="热点" prop="hotTag">-->
           <!--<el-input v-model="dataForm.hotTag" maxlength="30" placeholder="热点"></el-input>-->
         <!--</el-form-item>-->
-      <el-form-item label="首页推荐" >
+      <el-form-item label="首页推荐" prop="orderNum" >
         <template>
           <el-radio v-model="dataForm.orderNum" label="1">是</el-radio>
           <el-radio v-model="dataForm.orderNum" label="0">否</el-radio>
         </template>
       </el-form-item>
-      <el-form-item v-if="dataForm.orderNum==1" label="颜色编码" prop="color">
-        <el-collapse style="padding: 0;" class="el-input__inner">
-          <div  v-bind:style="{height:selectColor.length>6?'auto':'38px'}"  class="tagList colorCode"><el-tag
-
-            v-for="(tag,index) in selectColor"
-            :key="tag.name"
-            closable
-            size="mini"
-            @close="colorClose(tag)"
-            v-bind:style="{background:tag.name,width:'auto'}"
-            >
-            {{tag.name}}
-          </el-tag></div>
-          <el-collapse-item style="height: 38px;line-height: 38px;" title="" name="1">
-            <div class="tagDiv" v-for="item in tags"><span class="tagcolor" v-bind:style="{background:item.name}"></span><span v-on:click="getColor(item)" class="tagname">{{item.name}}</span></div>
-          </el-collapse-item>
-        </el-collapse>
-        </el-form-item>
       <el-form-item label="最小金额" prop="minAmount">
           <el-input v-model="dataForm.minAmount" maxlength="30" placeholder="最小金额"></el-input>元
         </el-form-item>
@@ -101,7 +83,27 @@
       	  <!--<el-form-item label="公积金" prop="provideSecs">-->
           <!--<el-input v-model="dataForm.provideSecs" maxlength="30" placeholder="公积金"></el-input>-->
         <!--</el-form-item>-->
+      <el-form-item label="热门标签" prop="hotTag">
+        <el-input v-model="dataForm.hotTag" maxlength="30" placeholder="多个热门标签使用逗号分隔,每个标签的字数不要超过4个"></el-input>
+      </el-form-item>
+      <el-form-item  label="颜色编码" prop="color">
+        <el-collapse style="padding: 0;" class="el-input__inner">
+          <div  v-bind:style="{height:selectColor.length>6?'auto':'38px'}"  class="tagList colorCode"><el-tag
 
+            v-for="(tag,index) in selectColor"
+            :key="tag.name"
+            closable
+            size="mini"
+            @close="colorClose(tag)"
+            v-bind:style="{background:tag.name,width:'auto'}"
+          >
+            {{tag.name}}
+          </el-tag></div>
+          <el-collapse-item style="height: 38px;line-height: 38px;" title="" name="1">
+            <div class="tagDiv" v-for="item in tags"><span class="tagcolor" v-bind:style="{background:item.name}"></span><span v-on:click="getColor(item)" class="tagname">{{item.name}}</span></div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form-item>
       <el-form-item label="成功次数" prop="successCount">
           <el-input v-model="dataForm.successCount" maxlength="30" placeholder="成功次数"></el-input>
         </el-form-item>
@@ -111,7 +113,7 @@
           <el-input v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input>%
         </el-form-item>
 
-      <el-form-item label="状态" >
+      <el-form-item label="状态" prop="status">
         <template>
           <el-radio v-model="dataForm.status" label="0">上架</el-radio>
           <el-radio v-model="dataForm.status" label="3">下架</el-radio>
@@ -214,8 +216,22 @@
     },
     methods: {
       getColor (item) {
-        this.selectColor = []
-        this.selectColor.push(item)
+        var arr
+        if(this.dataForm.hotTag !=  ''){
+          arr = this.dataForm.hotTag.split(',')
+        } else {
+          arr = []
+        }
+        console.log(arr)
+        if (this.selectColor.length < arr.length ) {
+          this.selectColor.push(item)
+        } else {
+          this.$message({
+            message: '颜色个数不能超过热门标签个数',
+            type: 'warning'
+          })
+        }
+
         Array.from(new Set(this.selectColor))
       },
       colorClose (tag) {
@@ -315,6 +331,7 @@
                   this.dataForm.description = data.loans.description
                   this.dataForm.status = data.loans.status + ''
                   this.dataForm.offCount = data.loans.offCount
+                  this.dataForm.hotTag = data.loans.hotTag
                   // this.dataForm.changeoffCount = data.loans.offCount
                   this.companyName = data.loans.loanName
                   this.selectProduct.productName = data.loans.loanName
@@ -353,7 +370,8 @@
             successCount: 0,
             orderNum: '1',
             status: '0',
-            offCount: 10000
+            offCount: 10000,
+            hotTag: ''
           }
           this.selectProduct = {}
           this.companyName = ''
@@ -386,24 +404,7 @@
           this.$message.error('上传头像图片大小不能超过 2MB!')
           return false
         }
-        var _this = this
-        return new Promise(function (resolve, reject) {
-          var reader = new FileReader()
-          reader.onload = function (event) {
-            var image = new Image()
-            image.onload = function () {
-              var width = this.width
-              var height = this.height
-              if (width != 52 || height != 52) {
-                _this.$alert('图片尺寸必须为750*300!', '提示', {confirmButtonText: '确定'})
-                reject()
-              }
-              resolve()
-            }
-            image.src = event.target.result
-          }
-          reader.readAsDataURL(file)
-        })
+
       },
       // 上传成功
       successHandle (response, file, fileList) {
@@ -423,22 +424,10 @@
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
-          console.log(this.dataForm)
+          console.log(this.dataForm.hotTag)
+          var _this = this
           if (valid) {
-            if (this.dataForm.orderNum == 1) {
-              if (this.selectColor.length > 0) {
-                this.dataForm.color = this.selectColor[0].name
-              } else {
-                this.$message({
-                  message: '请选择颜色',
-                  type: 'earning',
-                  duration: 1500
-                })
-                return false
-              }
-            } else {
-              this.dataForm.color = '#fff'
-            }
+
             if (this.selectProduct != {}) {
               this.dataForm.loanName = this.selectProduct.productName
               this.dataForm.productId = this.selectProduct.productId
@@ -467,6 +456,71 @@
                 type: 'earning',
                 duration: 1500
               })
+            }
+            var arr2 = []
+            var str = this.dataForm.hotTag
+            if(this.dataForm.hotTag !=  ''){
+              arr2 = str.split(',')
+            } else {
+              arr2 = []
+            }
+
+            var flag = true
+            if(arr2.length == 0){
+              this.$message({
+                message: '热门标签个数不能为0',
+                type: 'earning',
+                duration: 1500
+              })
+              return false
+            }
+            if(arr2.length>2){
+              this.$message({
+                message: '热门标签个数不能超过2个',
+                type: 'earning',
+                duration: 1500
+              })
+              return false
+            }
+            for (var i = 0; i < arr2.length; i++) {
+              if (arr2[i].length > 4) {
+                this.$message({
+                  message: '热门标签字数不能超过4个',
+                  type: 'earning',
+                  duration: 1500
+                })
+                flag = false
+                break
+              }
+            }
+            if (flag) {
+              data.loans.hotTag = arr2
+              data.loans.hotTag =  data.loans.hotTag.join(',')
+            } else {
+              return false
+            }
+            if (this.selectColor.length == 0) {
+              this.$message({
+                message: '颜色个数不能为0',
+                type: 'earning',
+                duration: 1500
+              })
+              return false
+            }
+            if (this.selectColor.length > arr2.length) {
+              this.$message({
+                message: '颜色个数不能超过热门标签个数',
+                type: 'earning',
+                duration: 1500
+              })
+              return false
+            } else {
+              data.loans.color=[]
+              this.selectColor.forEach(function (n) {
+                data.loans.color.push(n.name)
+              })
+              data.loans.color = data.loans.color.join(',')
+              // this.dataForm.color = this.selectColor[0].name
             }
             console.log(data)
             this.$http({
