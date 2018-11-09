@@ -98,7 +98,7 @@
               url: this.$http.adornUrl(`/sys/channel/editChannelRegister`),
               method: 'post',
               params: this.$http.adornParams({
-                'id': this.dataForm.id || undefined,
+                'channelId': this.dataForm.id || undefined,
                 'percent': this.dataForm.percent
               })
             }).then(({data}) => {
