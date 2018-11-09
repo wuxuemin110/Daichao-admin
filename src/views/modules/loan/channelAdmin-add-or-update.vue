@@ -58,7 +58,8 @@
         }
         console.log(item, '二号弹窗')
         if (item) {
-          this.dataForm.id = item.channelId
+          this.dataForm.id = item.id
+          this.dataForm.channelId = item.channelId
         } else {
           this.dataForm.id = 0
         }
@@ -70,7 +71,7 @@
             this.$http({
               url: this.$http.adornUrl(`/sys/channel/selectOneById`),
               method: 'get',
-              params: this.$http.adornParams({channelId: item.channelId})
+              params: this.$http.adornParams({channelId: item.channelId, id: item.id})
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.dataForm.channelName = data.channelRegisterEntity.channelName
@@ -98,7 +99,8 @@
               url: this.$http.adornUrl(`/sys/channel/editChannelRegister`),
               method: 'post',
               params: this.$http.adornParams({
-                'channelId': this.dataForm.id || undefined,
+                'id': this.dataForm.id || null,
+                'channelId': this.dataForm.channelId || undefined,
                 'percent': this.dataForm.percent
               })
             }).then(({data}) => {
