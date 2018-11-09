@@ -51,12 +51,12 @@
             <el-input v-model="userBaseInfo.name"></el-input>
           </el-form-item> -->
         </el-form>
-        
+
         <div style="margin-left: 10px;">
           <span>该用户身份证曾经有过借贷记录：0 ；<a style="color: blue;">逾期次数：0 ；提前还款次数：0 </a> </span><br/>
           <span>该用户手机曾做为黑名单用户<a style="color: blue;">XXX</a>、用户<a style="color: blue;">XXX</a>的紧急联系人/频繁通话对象</span>
         </div>
-        
+
         <div style="margin-top: 30px;"><span style="font-size: 16px;font-weight: bold;">身份证照片</span></div>
         <el-table
           :data="identityAuthList"
@@ -173,7 +173,7 @@
               :row-class-name="setBaiqishiStrategyTableColor"
               border
               style="width: 100%;margin-top: 20px;">
-              <el-table-column 
+              <el-table-column
                 type="expand">
                 <template slot-scope="props">
                   <el-table
@@ -407,7 +407,7 @@
             </template>
           </el-table-column>
         </el-table>
-        
+
         <div style="margin-top: 30px;"><span style="font-size: 16px;font-weight: bold;">注册信息</span></div>
         <el-form :model="userBaseInfo" :inline="true" disabled label-width="100px">
           <el-form-item label="注册时间">
@@ -429,7 +429,7 @@
             <el-input v-model="userBaseInfo.channelName"></el-input>
           </el-form-item>
         </el-form>
-          
+
 
       </el-tab-pane>
       <el-tab-pane label="运营商信息" name="2">
@@ -459,7 +459,7 @@
       <el-tab-pane label="操作日志" name="6">
         <keep-alive>
           <component is="ApplyProcess" ref="applyProcess"></component>
-        </keep-alive>  
+        </keep-alive>
       </el-tab-pane>
     </el-tabs>
   </el-dialog>

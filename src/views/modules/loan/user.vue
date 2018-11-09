@@ -21,55 +21,55 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="APP版本">
-        <el-select v-model="dataForm.appVersion" placeholder="请选择版本" style="width: 150px;">
-          <el-option
-            v-for="item in appVersions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="APP名字">
-        <el-input v-model="dataForm.appName" placeholder="请输入名字" clearable style="width: 150px;"></el-input>
-      </el-form-item>
-      <el-form-item label="完件状态">
-        <el-select v-model="dataForm.finishStatus" placeholder="请选择状态" style="width: 150px;">
-          <el-option
-            v-for="item in finishStatusList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="下载途径">
-        <el-select v-model="dataForm.market" placeholder="请选择下载途径" style="width: 150px;">
-          <el-option
-            v-for="item in markets"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="姓名">
-        <el-input v-model="dataForm.name" placeholder="" clearable style="width: 150px;"></el-input>
-      </el-form-item>
-      <el-form-item label="手机">
-        <el-input v-model="dataForm.mobile" placeholder="" clearable style="width: 150px;"></el-input>
-      </el-form-item>
-      <el-form-item label="注册时间">
-        <el-date-picker
-          v-model="dataForm.registerTime"
-          type="daterange"
-          value-format="timestamp"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
-      </el-form-item>
+      <!--<el-form-item label="APP版本">-->
+        <!--<el-select v-model="dataForm.appVersion" placeholder="请选择版本" style="width: 150px;">-->
+          <!--<el-option-->
+            <!--v-for="item in appVersions"-->
+            <!--:key="item.value"-->
+            <!--:label="item.label"-->
+            <!--:value="item.value">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item label="APP名字">-->
+        <!--<el-input v-model="dataForm.appName" placeholder="请输入名字" clearable style="width: 150px;"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item label="完件状态">-->
+        <!--<el-select v-model="dataForm.finishStatus" placeholder="请选择状态" style="width: 150px;">-->
+          <!--<el-option-->
+            <!--v-for="item in finishStatusList"-->
+            <!--:key="item.value"-->
+            <!--:label="item.label"-->
+            <!--:value="item.value">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item label="下载途径">-->
+        <!--<el-select v-model="dataForm.market" placeholder="请选择下载途径" style="width: 150px;">-->
+          <!--<el-option-->
+            <!--v-for="item in markets"-->
+            <!--:key="item.value"-->
+            <!--:label="item.label"-->
+            <!--:value="item.value">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item label="姓名">-->
+        <!--<el-input v-model="dataForm.name" placeholder="" clearable style="width: 150px;"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item label="手机">-->
+        <!--<el-input v-model="dataForm.mobile" placeholder="" clearable style="width: 150px;"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item label="注册时间">-->
+        <!--<el-date-picker-->
+          <!--v-model="dataForm.registerTime"-->
+          <!--type="daterange"-->
+          <!--value-format="timestamp"-->
+          <!--range-separator="至"-->
+          <!--start-placeholder="开始日期"-->
+          <!--end-placeholder="结束日期">-->
+        <!--</el-date-picker>-->
+      <!--</el-form-item>-->
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
       </el-form-item>

@@ -16,8 +16,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:channel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('loan:channel:user')" type="primary" @click="addOrUpdateHandle3()">新增后台管理员</el-button>
+        <!--<el-button v-if="isAuth('sys:channel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
+        <el-button v-if="isAuth('loan:channel:user')" type="primary" @click="addOrUpdateHandle3()">新增渠道后台管理员</el-button>
         <!-- <el-button v-if="isAuth('sys:channel:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button> -->
       </el-form-item>
     </el-form>
@@ -88,7 +88,7 @@
         width="80"
         label="操作">
         <template slot-scope="scope">
-          <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button  type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -106,7 +106,7 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update2 v-if="addOrUpdateVisible2" ref="addOrUpdate2" @refreshDataList="getDataList"></add-or-update2>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update3 v-if="addOrUpdateVisible3" :channelList="dataList" ref="addOrUpdate3" @refreshDataList="getDataList"></add-or-update3>
+    <add-or-update3 v-if="addOrUpdateVisible3" :channelList="dataList2" ref="addOrUpdate3" @refreshDataList="getDataList"></add-or-update3>
     <el-form  v-if="isAuth('loan:channel:list')" :inline="true" :model="dataForm2" @keyup.enter.native="getDataList2()" style="margin-top: 20px;">
       <el-form-item label="渠道名">
         <el-input v-model="dataForm2.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
@@ -236,21 +236,8 @@
     activated () {
       this.getDataList2()
       console.log(this.$store.state.user.channelId)
-      if (this.$store.state.user.channelId) {
-        this.$http({
-          url: this.$http.adornUrl(`/sys/channel/selectOneById`),
-          method: 'get',
-          params: this.$http.adornParams({channelId: this.$store.state.user.channelId})
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.dataForm.channelName = data.channelRegisterEntity.channelName
-            console.log(this.dataForm.channelName)
-            this.getDataList()
-          }
-        })
-      } else {
         this.getDataList()
-      }
+
     },
     methods: {
       dateFormat (row, column) {
@@ -270,6 +257,7 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'channelName': this.dataForm.channelName,
+            'channelId': this.$store.state.user.channelId?this.$store.state.user.channelId : '',
             'saleUserName': this.dataForm.saleUserName,
             'startTime': this.dataForm.createTime !== null ? this.dataForm.createTime[0] : null,
             'endTime': this.dataForm.createTime !== null ? this.dataForm.createTime[1] + 86400000 : null

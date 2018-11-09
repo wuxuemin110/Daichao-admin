@@ -48,6 +48,9 @@
         align="center"
 
         label="充值金额">
+        <template slot-scope="scope">
+          <span>{{scope.row.recharge }}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="balance"
@@ -55,6 +58,9 @@
         align="center"
 
         label="余额">
+        <template slot-scope="scope">
+          <span>{{scope.row.balance }}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="totalRecharge"
@@ -62,6 +68,9 @@
         align="center"
 
         label="总充值">
+        <template slot-scope="scope">
+          <span>{{scope.row.totalRecharge }}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="createTime"

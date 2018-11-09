@@ -69,10 +69,10 @@
               this.dataForm.id = data.companyProductConsume.id
               this.dataForm.productDisplayNum = data.companyProduct.productDisplayNum
               this.dataForm.productName = data.companyProduct.productName
-              this.status = data.companyProduct.status ? data.companyProduct.status+'': '0'
+              this.status = (data.companyProductConsume.status + '')
               this.dataForm.adjustClick = data.companyProductConsume.adjustClick-0
               this.dataForm.clickLimit = data.companyProductConsume.clickLimit-0
-              console.log(this.dataForm)
+              // console.log(this.status)
             } else {
               this.$message.error(data.msg)
             }

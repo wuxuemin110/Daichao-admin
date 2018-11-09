@@ -4,9 +4,9 @@
       <el-form-item label="渠道名">
         <el-input v-model="dataForm.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
       </el-form-item>
-      <el-form-item label="销售员">
-        <el-input v-model="dataForm.saleUserName" placeholder="销售员" clearable style="width: 150px;"></el-input>
-      </el-form-item>
+      <!--<el-form-item label="销售员">-->
+        <!--<el-input v-model="dataForm.saleUserName" placeholder="销售员" clearable style="width: 150px;"></el-input>-->
+      <!--</el-form-item>-->
       <el-form-item label="添加时间">
         <el-date-picker
           v-model="dataForm.createTime"
