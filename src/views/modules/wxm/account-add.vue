@@ -51,8 +51,15 @@
       },
       // 表单提交
       dataFormSubmit () {
+
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+
+            if(this.dataForm.productId == ''){
+              this.$message.error('请点击产品名称输入框后选择~')
+              return
+            }
+
             this.$http({
               url: this.$http.adornUrl(`/generation/companyProduct/balance/save`),
               method: 'post',
@@ -105,7 +112,7 @@
           var restaurants = res;
           cb(restaurants);
         })
-      },
+    },
       handleSelect(item) {
         this.dataForm.productId = item.productId
       }

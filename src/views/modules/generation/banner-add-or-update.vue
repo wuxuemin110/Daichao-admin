@@ -16,16 +16,16 @@
         </el-upload>
       </el-form-item>
 
-      <el-form-item label="标题">
+      <el-form-item label="标题" prop="bannerTitle">
         <el-input v-model="dataForm.bannerTitle"></el-input>
       </el-form-item>
-      <el-form-item label="终端设备标识">
+      <el-form-item label="终端设备标识" prop="device">
         <el-select v-model="dataForm.device" placeholder="请选择终端设备">
           <el-option label="ios" value="ios"></el-option>
           <el-option label="android" value="android"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="产品名称">
+      <el-form-item label="产品名称" prop="productId">
         <div>
           <el-autocomplete
             v-model="productId"
@@ -36,11 +36,11 @@
         </div>
       </el-form-item>
 
-      <el-form-item label="状态">
+      <el-form-item label="状态" prop="status">
         <el-radio v-model="dataForm.status" label="0">上架</el-radio>
         <el-radio v-model="dataForm.status" label="1">下架</el-radio>
       </el-form-item>
-      <el-form-item label="排序">
+      <el-form-item label="排序" prop="level">
         <el-input v-model="dataForm.level"></el-input>
       </el-form-item>
     </el-form>
@@ -97,13 +97,22 @@
         timeout:  null,
         dataRule: {
           bannerTitle: [
-            { required: true, message: '产品名称不能为空', trigger: 'blur' }
+            { required: true, message: '标题不能为空', trigger: 'blur' }
           ],
           imageUrl: [
             { required: true, message: 'banner不能为空', trigger: 'blur' }
           ],
-          linkUrl: [
-            { required: true, message: '跳转地址不能为空', trigger: 'blur' }
+          device: [
+            { required: true, message: '终端设备标识不能为空', trigger: 'blur' }
+          ],
+          productId: [
+            { required: true, message: '产品名称不能为空', trigger: 'blur' }
+          ],
+          level: [
+            { required: true, message: '排序不能为空', trigger: 'blur' }
+          ],
+          status: [
+            { required: true, message: '状态不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -194,8 +203,14 @@
 
       // 表单提交
       dataFormSubmit () {
+
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+
+            if(this.dataForm.productId == ''){
+              this.$message.error('请点击产品名称输入框选择~')
+              return
+            }
             this.$http({
               url: this.$http.adornUrl(`/generation/banner/${!this.dataForm.bannerId ? 'save' : 'update'}`),
               method: 'post',
