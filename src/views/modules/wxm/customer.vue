@@ -69,6 +69,9 @@
         header-align="center"
         align="center"
         label="单价">
+        <template slot-scope="scope">
+          <span>{{scope.row.price}}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="contactName"

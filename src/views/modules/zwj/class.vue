@@ -85,7 +85,10 @@
       getDataList () {
         this.$http({
           url: this.$http.adornUrl('/sys/loanproduct/type/list'),
-          method: 'get'
+          method: 'get',
+          params: this.$http.adornParams({
+            flag:1,
+          })
         }).then((res) => {
           if (res.data.code != 0) {
             this.$message.error(res.data.msg)

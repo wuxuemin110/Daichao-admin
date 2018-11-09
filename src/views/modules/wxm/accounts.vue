@@ -35,12 +35,18 @@
         header-align="center"
         align="center"
         label="接入单价">
+        <template slot-scope="scope">
+          <span>{{scope.row.price }}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="conversionRate"
         header-align="center"
         align="center"
         label="注册转化率">
+        <template slot-scope="scope">
+          <span>{{scope.row.conversionRate }}%</span>
+        </template>
       </el-table-column>
 
       <el-table-column
@@ -60,18 +66,27 @@
         header-align="center"
         align="center"
         label="已结算金额">
+        <template slot-scope="scope">
+          <span>{{scope.row.sumSettedCount }}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="totalRecharge"
         header-align="center"
         align="center"
         label="总充值">
+        <template slot-scope="scope">
+          <span>{{scope.row.totalRecharge }}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="balance"
         header-align="center"
         align="center"
         label="余额">
+        <template slot-scope="scope">
+          <span>{{scope.row.balance }}元</span>
+        </template>
       </el-table-column>
 
       <el-table-column

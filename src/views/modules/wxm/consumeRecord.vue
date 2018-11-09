@@ -1,12 +1,12 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item>
-        <el-input v-model="dataForm.companyId" placeholder="输入公司ID查询" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.companyName" placeholder="输入公司名字查询" clearable></el-input>
-      </el-form-item>
+      <!--<el-form-item>-->
+        <!--<el-input v-model="dataForm.companyId" placeholder="输入公司ID查询" clearable></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item>-->
+        <!--<el-input v-model="dataForm.companyName" placeholder="输入公司名字查询" clearable></el-input>-->
+      <!--</el-form-item>-->
       <el-form-item>
         <el-input v-model="dataForm.productName" placeholder="输入产品名字查询" clearable></el-input>
       </el-form-item>
@@ -69,18 +69,27 @@
         header-align="center"
         align="center"
         label="注册转化率">
+        <template slot-scope="scope">
+          <span>{{scope.row.conversionRate}}%</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="balance"
         header-align="center"
         align="center"
         label="余额">
+        <template slot-scope="scope">
+          <span>{{scope.row.balance}}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="price"
         header-align="center"
         align="center"
         label="单价">
+        <template slot-scope="scope">
+          <span>{{scope.row.price}}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="residualClick"

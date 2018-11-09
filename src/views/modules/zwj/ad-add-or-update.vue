@@ -42,6 +42,7 @@
       <el-form-item label="持续时间" >
         <el-date-picker
           v-model="time"
+          unlink-panels
           type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"

@@ -50,14 +50,19 @@
       }
     },
     methods: {
-      init (id) {
+      init (item) {
         this.dataForm = {
           id: 0,
           channelName: '',
           percent: ''
         }
-        console.log(id, '二号弹窗')
-        this.dataForm.id = id || 0
+        console.log(item, '二号弹窗')
+        if (item) {
+          this.dataForm.id = item.channelId
+        } else {
+          this.dataForm.id = 0
+        }
+
         this.visible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
@@ -65,7 +70,7 @@
             this.$http({
               url: this.$http.adornUrl(`/sys/channel/selectOneById`),
               method: 'get',
-              params: this.$http.adornParams({id: id})
+              params: this.$http.adornParams({channelId: item.channelId})
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.dataForm.channelName = data.channelRegisterEntity.channelName

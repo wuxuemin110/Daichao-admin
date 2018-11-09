@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item label="角色" size="mini" prop="roleIdList">
 
-          <el-radio v-model="dataForm.channelId" v-for="role in channelList" :key="role.channelId" :label="role.channelId">{{ role.channelName }}</el-radio>
+          <el-radio v-model="dataForm.channelId" v-for="role in channelList" :key="role.id" :label="role.id">{{ role.channelName }}</el-radio>
 
       </el-form-item>
     </el-form>
