@@ -68,7 +68,7 @@
         header-align="center"
         align="center"
 
-        label="显示注册数">
+        label="注册数">
       </el-table-column>
       <el-table-column
         prop="percent"

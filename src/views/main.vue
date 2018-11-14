@@ -75,7 +75,11 @@
             this.loading = false
             this.userId = data.user.userId
             this.userName = data.user.username
-            this.userChannelId = data.user.channelId
+            if(data.user.channelId){
+              this.userChannelId = data.user.channelId
+              this.$router.push({name:'loan-channelAdmin'})
+            }
+
           }
         })
       }

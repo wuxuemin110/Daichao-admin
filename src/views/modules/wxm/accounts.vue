@@ -1,9 +1,9 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item>
-        <el-input v-model="dataForm.productNum" placeholder="产品编号查询" clearable></el-input>
-      </el-form-item>
+      <!--<el-form-item>-->
+        <!--<el-input v-model="dataForm.productNum" placeholder="产品编号查询" clearable></el-input>-->
+      <!--</el-form-item>-->
       <el-form-item>
         <el-input v-model="dataForm.productName" placeholder="产品名字查询" clearable></el-input>
       </el-form-item>

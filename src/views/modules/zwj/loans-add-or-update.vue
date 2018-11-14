@@ -45,13 +45,13 @@
         </template>
       </el-form-item>
       <el-form-item label="最小金额" prop="minAmount">
-          <el-input v-model="dataForm.minAmount" maxlength="30" placeholder="最小金额"></el-input>元
+          <el-input-number v-model="dataForm.minAmount" maxlength="30" placeholder="最小金额"></el-input-number>元
         </el-form-item>
       <el-form-item label="最大金额" prop="maxAmount">
-          <el-input v-model="dataForm.maxAmount" maxlength="30" placeholder="最大金额"></el-input>元
+          <el-input-number v-model="dataForm.maxAmount" maxlength="30" placeholder="最大金额"></el-input-number>元
 
         </el-form-item><el-form-item label="周期" prop="days">
-          <el-input v-model="dataForm.days" maxlength="30" placeholder="周期"></el-input>天
+          <el-input-number v-model="dataForm.days" maxlength="30" placeholder="周期"></el-input-number>天
         </el-form-item>
 
       <el-form-item label="标签" >
@@ -77,7 +77,7 @@
         </el-form-item>
       <div class="tabWrap" v-if="selectTab.length>0">
         <el-form-item :key="item.typeId" :label="item.typeName" v-for="item in selectTab">
-          <el-input v-model="item.level" maxlength="30" placeholder="排序"></el-input>
+          <el-input-number v-model="item.level" maxlength="30" placeholder="排序"></el-input-number>
         </el-form-item>
       </div>
       	  <!--<el-form-item label="公积金" prop="provideSecs">-->
@@ -105,12 +105,12 @@
         </el-collapse>
       </el-form-item>
       <el-form-item label="成功次数" prop="successCount">
-          <el-input v-model="dataForm.successCount" maxlength="30" placeholder="成功次数"></el-input>
+          <el-input-number v-model="dataForm.successCount" maxlength="30" placeholder="成功次数"></el-input-number>
         </el-form-item>
 
 
       <el-form-item label="日年化率" prop="dayRate">
-          <el-input v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input>%
+          <el-input-number v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input-number>%
         </el-form-item>
 
       <el-form-item label="状态" prop="status">
@@ -186,7 +186,7 @@
             { required: true, message: '产品图标不能为空', trigger: 'blur' }
           ],
           linkUrl: [
-            { required: true, message: '跳转地址不能为空', trigger: 'blur' }
+            { required: true, message: '跳转地址请选择商品,选择商品之后自动添加', trigger: 'blur' }
           ]
         },
         selectProduct: {},
@@ -217,13 +217,13 @@
     methods: {
       getColor (item) {
         var arr
-        if(this.dataForm.hotTag !=  ''){
+        if (this.dataForm.hotTag != '') {
           arr = this.dataForm.hotTag.split(',')
         } else {
           arr = []
         }
         console.log(arr)
-        if (this.selectColor.length < arr.length ) {
+        if (this.selectColor.length < arr.length) {
           this.selectColor.push(item)
         } else {
           this.$message({
@@ -338,6 +338,7 @@
 
                   this.selectProduct.productId = data.loans.productId
                   this.selectTab.length = 0
+                  var _this = this
                   data.loanTypeSecond.forEach((n) => {
                     var obj = {}
                     obj.typeId = n.typeId
@@ -346,11 +347,13 @@
                     obj.superTypeId = n.superTypeId
                     this.selectTab.push(obj)
                   })
-                  var obj = {}
-                  obj.name = data.loans.color
+                  var colorArr = data.loans.color.split(',')
                   this.selectColor.length = 0
-
-                  this.selectColor.push(obj)
+                  colorArr.forEach(function (n) {
+                    var obj = {}
+                    obj.name = n
+                    _this.selectColor.push(obj)
+                  })
                 }
               })
             }
@@ -404,7 +407,6 @@
           this.$message.error('上传头像图片大小不能超过 2MB!')
           return false
         }
-
       },
       // 上传成功
       successHandle (response, file, fileList) {
@@ -427,7 +429,6 @@
           console.log(this.dataForm.hotTag)
           var _this = this
           if (valid) {
-
             if (this.selectProduct != {}) {
               this.dataForm.loanName = this.selectProduct.productName
               this.dataForm.productId = this.selectProduct.productId
@@ -459,14 +460,14 @@
             }
             var arr2 = []
             var str = this.dataForm.hotTag
-            if(this.dataForm.hotTag !=  ''){
+            if (this.dataForm.hotTag != '') {
               arr2 = str.split(',')
             } else {
               arr2 = []
             }
 
             var flag = true
-            if(arr2.length == 0){
+            if (arr2.length == 0) {
               this.$message({
                 message: '热门标签个数不能为0',
                 type: 'earning',
@@ -474,7 +475,7 @@
               })
               return false
             }
-            if(arr2.length>2){
+            if (arr2.length > 2) {
               this.$message({
                 message: '热门标签个数不能超过2个',
                 type: 'earning',
@@ -495,7 +496,7 @@
             }
             if (flag) {
               data.loans.hotTag = arr2
-              data.loans.hotTag =  data.loans.hotTag.join(',')
+              data.loans.hotTag = data.loans.hotTag.join(',')
             } else {
               return false
             }
@@ -515,7 +516,7 @@
               })
               return false
             } else {
-              data.loans.color=[]
+              data.loans.color = []
               this.selectColor.forEach(function (n) {
                 data.loans.color.push(n.name)
               })
@@ -545,6 +546,9 @@
             })
           }
         })
+      },
+      testNum () {
+
       }
     }
   }

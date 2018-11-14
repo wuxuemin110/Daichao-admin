@@ -10,7 +10,7 @@ import * as config from './modules/config'
 import * as oss from './modules/oss'
 import * as schedule from './modules/schedule'
 
-//console.log('\n%c!<-------------------- 接口拦截, mock模拟数据 s -------------------->', 'color:blue')
+//// console.log('\n%c!<-------------------- 接口拦截, mock模拟数据 s -------------------->', 'color:blue')
 
 // tips
 // 1. 关闭[业务模块集]拦截, create方法[第2个参数]设置. (默认开启)
@@ -43,8 +43,8 @@ function fnCreate (mods, isOpen = true) {
         // 控制台输出信息
         console.log('\n')
         console.log(' url: ', mod.url)
-        console.log('type: ', mod.type)
-        console.log('data: ', mod.data)
+        // console.log('type: ', mod.type)
+        // console.log('data: ', mod.data)
         console.log('\n')
 
         // 2种url拦截方式

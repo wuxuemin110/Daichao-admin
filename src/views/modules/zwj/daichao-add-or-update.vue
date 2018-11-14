@@ -96,7 +96,15 @@
           url: this.$http.adornUrl(`/generation/user/` + this.dataForm.phone),
           method: 'get'
         }).then((res) => {
-          this.userInfo = res.data.user
+          if(res.data.user){
+            this.userInfo = res.data.user
+          }else {
+            this.$message({
+              message: '搜索不到该用户',
+              type: 'warning'
+            })
+          }
+
           console.log(this.userInfo)
         })
       },

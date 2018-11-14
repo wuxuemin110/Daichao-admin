@@ -39,16 +39,16 @@
           <el-radio v-model="dataForm.status" label="2">下架</el-radio>
         </template>
       </el-form-item>
-      <el-form-item label="持续时间" >
-        <el-date-picker
-          v-model="time"
-          unlink-panels
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
-      </el-form-item>
+      <!--<el-form-item label="持续时间" >-->
+        <!--<el-date-picker-->
+          <!--v-model="time"-->
+          <!--unlink-panels-->
+          <!--type="datetimerange"-->
+          <!--range-separator="至"-->
+          <!--start-placeholder="开始日期"-->
+          <!--end-placeholder="结束日期">-->
+        <!--</el-date-picker>-->
+      <!--</el-form-item>-->
         <el-form-item label="跳转地址" prop="linkUrl">
           <el-input disabled v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
         </el-form-item>
@@ -172,10 +172,10 @@
                   this.selectProduct.productNum = data.openScreenPic.productNum
                   this.selectProduct.companyId = data.openScreenPic.companyId
                   this.companyName = data.openScreenPic.companyId + '-' + data.openScreenPic.productNum + ' ' + data.openScreenPic.productName
-                  this.time=[]
-                  this.time[0] = new Date(this.dataForm.showTime)
-                  this.time[1] = new Date(this.dataForm.hideTime)
-                  console.log(this.time)
+                  // this.time=[]
+                  // this.time[0] = new Date(this.dataForm.showTime)
+                  // this.time[1] = new Date(this.dataForm.hideTime)
+                  // console.log(this.time)
                   // document.getElementsByClassName('el-range-input')[0].value=this.dataForm.showTime
                   // document.getElementsByClassName('el-range-input')[1].value=this.dataForm.showTime
                 }
@@ -192,7 +192,7 @@
           }
           this.selectProduct = {}
           this.companyName = ''
-          this.time=[]
+          // this.time=[]
         }
       },
       // 上传之前
@@ -257,16 +257,16 @@
             })
             return false
           }
-          this.dataForm.showTime = this.time[0].getTime()
-          this.dataForm.hideTime = this.time[1].getTime()
-          if (!this.dataForm.showTime || !this.dataForm.hideTime) {
-            this.$message({
-              message: '请选择时间段',
-              type: 'earning',
-              duration: 1500
-            })
-            return false
-          }
+          // this.dataForm.showTime = this.time[0].getTime()
+          // this.dataForm.hideTime = this.time[1].getTime()
+          // if (!this.dataForm.showTime || !this.dataForm.hideTime) {
+          //   this.$message({
+          //     message: '请选择时间段',
+          //     type: 'earning',
+          //     duration: 1500
+          //   })
+          //   return false
+          // }
 
           this.$http({
             url: this.$http.adornUrl('/generation/openScreen/' + (this.dataForm.id ? 'update' : 'save')),

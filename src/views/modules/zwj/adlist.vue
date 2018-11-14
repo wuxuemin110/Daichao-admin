@@ -51,22 +51,22 @@
         align="center"
         label="设备">
       </el-table-column>
-      <el-table-column
-        prop="showTime"
-        header-align="center"
-        align="center"
-        width="180"
-        :formatter="dateFormat"
-        label="开始时间">
-      </el-table-column>
-      <el-table-column
-        prop="hideTime"
-        header-align="center"
-        align="center"
-        width="180"
-        :formatter="dateFormat"
-        label="结束时间">
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="showTime"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--width="180"-->
+        <!--:formatter="dateFormat"-->
+        <!--label="开始时间">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--prop="hideTime"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--width="180"-->
+        <!--:formatter="dateFormat"-->
+        <!--label="结束时间">-->
+      <!--</el-table-column>-->
       <!--<el-table-column-->
         <!--prop="createTime"-->
         <!--header-align="center"-->

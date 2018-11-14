@@ -26,6 +26,20 @@
       <el-form-item>
         <el-input v-model="dataForm.appName" placeholder="app名称" clearable></el-input>
       </el-form-item>
+      <el-form-item label="最近一次登陆时间">
+        <el-date-picker
+          v-model="dataForm.lastLoginTime"
+          type="date"
+          value-format="timestamp"
+          placeholder="最后一次登录">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label='登录次数'>
+        <el-input-number v-model="dataForm.loginCount" placeholder="登录次数" clearable></el-input-number>
+      </el-form-item>
+      <el-form-item label='点击次数'>
+        <el-input-number v-model="dataForm.clickCount" placeholder="点击次数" clearable></el-input-number>
+      </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
       </el-form-item>
@@ -128,7 +142,10 @@
           channelId:'',//渠道id
           deviceSource:'',//设备
           appName:'',//app名称
-          market:''
+          market:'',
+          lastLoginTime: (new Date()).getTime(),
+          loginCount: 0,
+          clickCount: 0
         },
         fullscreenLoading: false,
         dataList: [],
@@ -175,7 +192,10 @@
             'channelId':this.dataForm.channelId,
             'deviceSource':this.dataForm.deviceSource,
             'appName':this.dataForm.appName,
-            'market':this.dataForm.market
+            'market':this.dataForm.market,
+            'lastLoginTime': this.dataForm.lastLoginTime,
+            'loginCount': this.dataForm.loginCount,
+            'clickCount': this.dataForm.clickCount
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

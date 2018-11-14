@@ -92,6 +92,12 @@
         label="剩余点击数">
       </el-table-column>
       <el-table-column
+        prop="adjustClick"
+        header-align="center"
+        align="center"
+        label="调整点击数">
+      </el-table-column>
+      <el-table-column
         prop="clickLimit"
         header-align="center"
         align="center"

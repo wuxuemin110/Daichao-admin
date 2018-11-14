@@ -383,7 +383,7 @@
             bindFn: bindFn,
     
             /**
-             * 引用Console.log如果存在的话，否则引用一个[空函数loop](#WebUploader:Base.log)。
+             * 引用console.log如果存在的话，否则引用一个[空函数loop](#WebUploader:Base.log)。
              * @grammar Base.log( args... ) => undefined
              * @method log
              */
