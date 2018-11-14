@@ -61,6 +61,9 @@
         header-align="center"
         align="center"
         label="推广链接">
+        <template slot-scope="scope">
+          <a target="view_window" :href="scope.row.promotionLink">{{scope.row.promotionLink}}</a>
+        </template>
       </el-table-column>
       <el-table-column
         prop="createTime"

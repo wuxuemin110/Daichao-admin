@@ -7,6 +7,9 @@
       <el-form-item label="渠道名" prop="channelName">
         <el-input v-model="dataForm.channelName" placeholder="渠道名称" style="width: 200px;"></el-input>
       </el-form-item>
+      <el-form-item label="渠道昵称" prop="channelNickName">
+        <el-input :disabled="dataForm.id?true:false" v-model="dataForm.channelNickName" placeholder="渠道昵称" style="width: 200px;"></el-input>
+      </el-form-item>
       <el-form-item label="推广链接" prop="promotionLink">
         <el-input v-model="dataForm.promotionLink" placeholder="推广链接" ></el-input>
       </el-form-item>
@@ -38,11 +41,15 @@
           channelName: '',
           promotionLink: '',
           remark: '',
-          status:''
+          status: '',
+          channelNickName: ''
         },
         dataRule: {
           channelName: [
             { required: true, message: '渠道名称不能为空', trigger: 'blur' }
+          ],
+          channelNickName: [
+        { required: true, message: '渠道昵称不能为空', trigger: 'blur' }
           ],
           promotionLink: [
             { required: true, message: '推广链接不能为空', trigger: 'blur' }
@@ -66,10 +73,11 @@
                 this.dataForm.channelName = data.channel.channelName
                 this.dataForm.promotionLink = data.channel.promotionLink
                 this.dataForm.remark = data.channel.remark
-                this.dataForm.status = data.channel.status+''
+                this.dataForm.status = data.channel.status + ''
+                this.dataForm.channelNickName = data.channel.channelNickName
               }
             })
-          }else{
+          } else {
             this.dataForm.status = '0'
           }
         })
@@ -86,7 +94,8 @@
                 'channelName': this.dataForm.channelName,
                 'promotionLink': this.dataForm.promotionLink,
                 'remark': this.dataForm.remark,
-                'status': this.dataForm.status
+                'status': this.dataForm.status,
+                'channelNickName': this.dataForm.channelNickName,
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

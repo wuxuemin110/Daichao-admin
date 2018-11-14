@@ -22,7 +22,7 @@
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
       </el-form-item>
-      <el-form-item label="角色" size="mini" prop="roleIdList">
+      <el-form-item label="渠道" size="mini" prop="roleIdList">
 
           <el-radio v-model="dataForm.channelId" v-for="role in channelList" :key="role.id" :label="role.id">{{ role.channelName }}</el-radio>
 
@@ -82,7 +82,7 @@
           email: '',
           realName: '',
           mobile: '',
-          roleIdList: [10],
+          roleIdList: [11],
           status: 1,
           channelId: 0
         },
