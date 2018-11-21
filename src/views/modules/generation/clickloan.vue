@@ -37,25 +37,62 @@
         label="日期">
       </el-table-column>
       <el-table-column
+        prop="productDisplayNum"
+        header-align="center"
+        align="center"
+
+        label="产品编号">
+      </el-table-column>
+      <el-table-column
         prop="loanTitle"
         header-align="center"
         align="center"
-        width="150"
+
         label="代超名称">
       </el-table-column>
       <el-table-column
         prop="count"
         header-align="center"
         align="center"
-        width="120"
+
         label="点击次数">
       </el-table-column>
       <el-table-column
         prop="completeCount"
         header-align="center"
         align="center"
-        width="120"
+
         label="加载完成次数">
+      </el-table-column>
+      <el-table-column
+        prop="sumRegisteredCount"
+        header-align="center"
+        align="center"
+
+        label="注册数">
+        <template slot-scope="scope">
+          <span>{{scope.row.sumRegisteredCount?scope.row.sumRegisteredCount:0 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="loadRate"
+        header-align="center"
+        align="center"
+        width="120"
+        label="加载完成率">
+        <template slot-scope="scope">
+          <span>{{scope.row.loadRate }}%</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="conversionRate"
+        header-align="center"
+        align="center"
+
+        label="注册转换率">
+        <template slot-scope="scope">
+          <span>{{scope.row.conversionRate?scope.row.conversionRate:0 }}%</span>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination

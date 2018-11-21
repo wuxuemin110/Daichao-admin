@@ -55,6 +55,17 @@
           <span>{{scope.row.recharge }}元</span>
         </template>
       </el-table-column>
+
+      <el-table-column
+        prop="totalRecharge"
+        header-align="center"
+        align="center"
+
+        label="总充值">
+        <template slot-scope="scope">
+          <span>{{scope.row.totalRecharge }}元</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="balance"
         header-align="center"
@@ -66,14 +77,10 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="totalRecharge"
+        prop="userName"
         header-align="center"
         align="center"
-
-        label="总充值">
-        <template slot-scope="scope">
-          <span>{{scope.row.totalRecharge }}元</span>
-        </template>
+        label="操作员">
       </el-table-column>
       <el-table-column
         prop="createTime"

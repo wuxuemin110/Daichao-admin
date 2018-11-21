@@ -86,7 +86,7 @@
         <!--label="联系方式">-->
       <!--</el-table-column>-->
       <el-table-column
-      prop="contactName"
+      prop="sumClickComplete"
       header-align="center"
       align="center"
       label="当日点击数上限">

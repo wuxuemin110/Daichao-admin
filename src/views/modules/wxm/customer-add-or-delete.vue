@@ -3,7 +3,7 @@
     :title="dataForm.productId == null ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="130px">
       <el-form-item label="产品名称" prop="productName">
         <el-input v-model="dataForm.productName" maxlength="30" placeholder="产品名称"></el-input>
       </el-form-item>
@@ -23,12 +23,15 @@
       <el-form-item label="单价" prop="price">
         <el-input v-model="dataForm.price" maxlength="30" placeholder="单价"></el-input>
       </el-form-item>
-      <el-form-item label="联系人" prop="contactName">
-        <el-input v-model="dataForm.contactName" maxlength="30" placeholder="联系人"></el-input>
+      <el-form-item label="当日点击数上限" prop="price">
+        <el-input v-model="dataForm.sumClickComplete" maxlength="30" placeholder="点击数上限"></el-input>
       </el-form-item>
-      <el-form-item label="联系号码" prop="contactMobile">
-        <el-input v-model="dataForm.contactMobile" maxlength="30" placeholder="联系号码"></el-input>
-      </el-form-item>
+      <!--<el-form-item label="联系人" prop="contactName">-->
+        <!--<el-input v-model="dataForm.contactName" maxlength="30" placeholder="联系人"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item label="联系号码" prop="contactMobile">-->
+        <!--<el-input v-model="dataForm.contactMobile" maxlength="30" placeholder="联系号码"></el-input>-->
+      <!--</el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -66,13 +69,9 @@
           linkUrl: [
             { required: true, message: '连接地址不能为空', trigger: 'blur' }
           ],
-          contactName: [
-            { required: true, message: '联系人不能为空', trigger: 'blur' }
+          sumClickComplete: [
+            { required: true, message: '当日点击上限不能为空', trigger: 'blur' }
           ],
-          contactMobile: [
-            { required: true, message: '联系号码不能为空', trigger: 'blur' }
-          ]
-
         }
       }
     },
@@ -91,6 +90,7 @@
           this.dataForm.contactName = null
           this.dataForm.contactMobile = null
           this.dataForm.productId = null
+          this.dataForm.sumClickComplete = null
         }else {
           this.dataForm.productName = item.productName
           this.dataForm.companyId = item.companyId
@@ -99,6 +99,7 @@
           this.dataForm.contactName = item.contactName
           this.dataForm.contactMobile = item.contactMobile
           this.dataForm.productId = item.productId
+          this.dataForm.sumClickComplete = item.sumClickComplete
         }
 
       },
@@ -116,8 +117,9 @@
                 'productName': this.dataForm.productName,
                 'linkUrl':this.dataForm.linkUrl,
                 'price':this.dataForm.price,
-                'contactName':this.dataForm.contactName,
-                'contactMobile':this.dataForm.contactMobile,
+                'sumClickComplete':this.dataForm.sumClickComplete,
+                // 'contactName':this.dataForm.contactName,
+                // 'contactMobile':this.dataForm.contactMobile,
                 'productId':this.dataForm.productId || null
               })
             }).then(({data}) => {

@@ -34,6 +34,18 @@
         label="公司名称">
       </el-table-column>
       <el-table-column
+        prop="contactName"
+        header-align="center"
+        align="center"
+        label="联系人">
+      </el-table-column>
+      <el-table-column
+        prop="contactMobile "
+        header-align="center"
+        align="center"
+        label="联系电话">
+      </el-table-column>
+      <el-table-column
         prop="createTime"
         header-align="center"
         align="center"

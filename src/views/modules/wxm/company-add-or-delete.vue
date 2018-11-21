@@ -7,6 +7,12 @@
       <el-form-item label="公司名称" prop="companyName">
         <el-input v-model="dataForm.companyName" maxlength="30" placeholder="公司名称"></el-input>
       </el-form-item>
+      <el-form-item label="联系人" prop="contactName">
+      <el-input v-model="dataForm.contactName" maxlength="30" placeholder="联系人"></el-input>
+      </el-form-item>
+      <el-form-item label="联系号码" prop="contactMobile">
+      <el-input v-model="dataForm.contactMobile" maxlength="30" placeholder="联系号码"></el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -52,6 +58,12 @@
         dataRule: {
           companyName: [
             { required: true, message: '公司名称不能为空', trigger: 'blur' }
+          ],
+          contactName: [
+            { required: true, message: '联系人不能为空', trigger: 'blur' }
+          ],
+          contactMobile: [
+            { required: true, message: '联系电话不能为空', trigger: 'blur' }
           ]
 
         }
@@ -64,9 +76,13 @@
         if(item == undefined){
           this.dataForm.companyName = null
           this.dataForm.companyId = null
+          this.dataForm.contactName = null
+          this.dataForm.contactMobile  = null
         }else {
           this.dataForm.companyName = item.companyName
           this.dataForm.companyId = item.companyId
+          this.dataForm.contactName = item.contactName
+          this.dataForm.contactMobile  = item.contactMobile
         }
 
       },
