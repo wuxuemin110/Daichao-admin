@@ -22,6 +22,9 @@
         <el-button @click="getDataList()">查询</el-button>
 
       </el-form-item>
+      <el-form-item>
+        <el-button  v-loading.fullscreen.lock="fullscreenLoading"  @click="Download()"   type="primary">导出列表</el-button>
+      </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
@@ -94,23 +97,23 @@
 </template>
 
 <script>
-
   import { formatDate } from '@/utils/format'
   export default {
     data () {
       return {
         dataForm: {
           productName: null,
-          productDisplayNum:null,
-          date:null
+          productDisplayNum: null,
+          date: null
         },
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
+        fullscreenLoading: false,
         addOrUpdateVisible: false,
-        dataListSelections:[]
+        dataListSelections: []
       }
     },
     components: {
@@ -127,6 +130,9 @@
         }
         return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
       },
+      Download () {
+        window.location.href = this.$http.adornUrl(`/sys/report/rechargeReportDownload?token=${this.$cookie.get('token')}${this.dataForm.productName ? '&productName=' + this.dataForm.productName : ''}${this.dataForm.productDisplayNum ? '&productDisplayNum=' + this.dataForm.productDisplayNum : ''}${this.dataForm.startDate ? '&startDate=' + this.dataForm.startDate : ''}${this.dataForm.endDate ? '&endDate=' + this.dataForm.endDate : ''}`)
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
@@ -138,9 +144,9 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'productName': this.dataForm.productName || null,
-            'productDisplayNum':this.dataForm.productDisplayNum || null,
-            'startDate':this.dataForm.date !== null ? this.dataForm.date[0] : null,
-            'endDate':this.dataForm.date !== null ? this.dataForm.date[1] : null,
+            'productDisplayNum': this.dataForm.productDisplayNum || null,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -167,7 +173,6 @@
 
       // 新增 / 修改
       addOrUpdateHandle (item) {
-
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(item)
@@ -184,8 +189,8 @@
             url: this.$http.adornUrl('/generation/companyInfo/delete'),
             method: 'post',
             params: this.$http.adornParams({
-              'token':this.$cookie.get('token'),
-              'companyId':id,
+              'token': this.$cookie.get('token'),
+              'companyId': id
             })
           }).then(({data}) => {
             if (data && data.code === 0) {

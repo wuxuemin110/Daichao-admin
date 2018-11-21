@@ -7,20 +7,23 @@
       <!--<el-form-item>-->
         <!--<el-input v-model="dataForm.productDisplayNum" placeholder="产品编号查询" clearable></el-input>-->
       <!--</el-form-item>-->
-      <!--<el-form-item label="日期" >-->
-        <!--<el-date-picker-->
-          <!--unlink-panels-->
-          <!--v-model="dataForm.date"-->
-          <!--type="datetimerange"-->
-          <!--value-format="yyyy-MM-dd HH:mm:ss"-->
-          <!--range-separator="至"-->
-          <!--start-placeholder="开始日期"-->
-          <!--end-placeholder="结束日期">-->
-        <!--</el-date-picker>-->
-      <!--</el-form-item>-->
+      <el-form-item label="日期" >
+        <el-date-picker
+          unlink-panels
+          v-model="dataForm.date"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
 
+      </el-form-item>
+      <el-form-item>
+        <el-button  v-loading.fullscreen.lock="fullscreenLoading"  @click="Download()" type="primary">导出列表</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -128,23 +131,23 @@
 </template>
 
 <script>
-
   import { formatDate } from '@/utils/format'
   export default {
     data () {
       return {
         dataForm: {
           productName: null,
-          productDisplayNum:null,
-          date:null
+          productDisplayNum: null,
+          date: null
         },
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
+        fullscreenLoading: false,
         dataListLoading: false,
         addOrUpdateVisible: false,
-        dataListSelections:[]
+        dataListSelections: []
       }
     },
     components: {
@@ -161,6 +164,9 @@
         }
         return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
       },
+      Download () {
+        window.location.href = this.$http.adornUrl(`/sys/report/productBalanceReportDownload?token=${this.$cookie.get('token')}${this.dataForm.productName ? '&productName=' + this.dataForm.productName : ''}${this.dataForm.productDisplayNum ? '&productDisplayNum=' + this.dataForm.productDisplayNum : ''}${this.dataForm.startDate ? '&startDate=' + this.dataForm.startDate : ''}${this.dataForm.endDate ? '&endDate=' + this.dataForm.endDate : ''}`)
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
@@ -172,9 +178,9 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'productName': this.dataForm.productName || null,
-            'productDisplayNum':this.dataForm.productDisplayNum || null,
-            'startDate':this.dataForm.date !== null ? this.dataForm.date[0] : null,
-            'endDate':this.dataForm.date !== null ? this.dataForm.date[1] : null,
+            'productDisplayNum': this.dataForm.productDisplayNum || null,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -217,8 +223,8 @@
             url: this.$http.adornUrl('/generation/companyInfo/delete'),
             method: 'post',
             params: this.$http.adornParams({
-              'token':this.$cookie.get('token'),
-              'companyId':id,
+              'token': this.$cookie.get('token'),
+              'companyId': id
             })
           }).then(({data}) => {
             if (data && data.code === 0) {

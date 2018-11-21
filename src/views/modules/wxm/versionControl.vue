@@ -20,6 +20,12 @@
          >
        </el-table-column>
        <el-table-column
+         prop="bundleId"
+         label="bundleId"
+         width="250"
+       >
+       </el-table-column>
+       <el-table-column
          prop="name"
          label="版本控制"
         >
