@@ -61,6 +61,7 @@
                 'token':this.$cookie.get('token'),
                 'productId':this.dataForm.productId,
                 'recharge': this.dataForm.recharge,
+                'uid': this.$store.state.user.id
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

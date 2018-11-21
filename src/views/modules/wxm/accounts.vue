@@ -161,6 +161,7 @@
     },
     activated () {
       this.getDataList()
+      console.log(this.$store.state.user)
     },
     methods: {
       dateFormat (row, column) {
