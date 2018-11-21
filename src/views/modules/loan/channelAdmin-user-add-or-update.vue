@@ -82,7 +82,7 @@
           email: '',
           realName: '',
           mobile: '',
-          roleIdList: [11],
+          roleIdList: [13],
           status: 1,
           channelId: 0
         },

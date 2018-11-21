@@ -14,6 +14,11 @@
           <el-option label="桔子贷款" value="1"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="BundleId" prop="code">
+        <el-select :disabled="dataForm.id" v-model="dataForm.bundleId" placeholder="请选择">
+          <el-option   v-for="item in bundleList" :label="item.label" :key="item.value"  :value="item.value"></el-option >
+        </el-select>
+      </el-form-item>
       <!--<el-form-item label="状态" prop="status">
         <el-select v-model="dataForm.status" placeholder="请选择">
           <el-option label="正常" value="0"></el-option >
@@ -30,38 +35,67 @@
 
 <script>
     export default {
-       data(){
-         return {
-           uploadUrl: '',
-           iconUrl: '',
-           visible: false,
-           dataForm: {
-             version:'',
-             code:'',
-           },
-           dataRule: {
-             version: [
+      data () {
+        return {
+          uploadUrl: '',
+          iconUrl: '',
+          visible: false,
+          dataForm: {
+            version: '',
+            code: '',
+            bundleId: ''
+          },
+          dataRule: {
+            version: [
                { required: true, message: '版本号不能为空', trigger: 'blur' }
-             ],
-             code: [
+            ],
+            code: [
                { required: true, message: '标识不能为空', trigger: 'blur' }
-             ]
-
-           },
-         }
-       },
+            ],
+            bundleId: [
+               { required: true, message: 'bundleId不能为空', trigger: 'blur' }
+            ]
+          },
+          bundleList: []
+        }
+      },
+      created () {
+        this.getBundleList()
+      },
       methods: {
         init (val) {
           this.visible = true
-          if(val !== undefined){
-            this.dataForm.version = val.version + '';
-            this.dataForm.code = val.code + '';
+          if (val !== undefined) {
+            this.dataForm.version = val.version + ''
+            this.dataForm.code = val.code + ''
             this.dataForm.id = val.id
-          }else {
-            this.dataForm.version =  '';
-            this.dataForm.code =  '';
+            this.dataForm.bundleId = val.bundleId
+          } else {
+            this.dataForm.version = ''
+            this.dataForm.code = ''
+            this.dataForm.bundleId = ''
             this.dataForm.id = null
           }
+        },
+        getBundleList () {
+          this.$http({
+            url: this.$http.adornUrl(`/generation/version/getBundleId`),
+            method: 'get'
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              var arr = []
+              data.list.forEach(function (n) {
+                var obj = {}
+                obj.label = n.bundleId
+                obj.value = n.bundleId
+                arr.push(obj)
+              })
+              this.bundleList = arr
+              console.log(this.bundleList)
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
         },
         // 表单提交
         dataFormSubmit () {
@@ -73,7 +107,8 @@
                 params: this.$http.adornParams({
                   'version': this.dataForm.version,
                   'code': this.dataForm.code,
-                   'id' :this.dataForm.id ? this.dataForm.id : null
+                  'id': this.dataForm.id ? this.dataForm.id : null,
+                  'bundleId': this.dataForm.bundleId
                 })
 
               }).then(({data}) => {

@@ -21,13 +21,19 @@
       v-loading="dataListLoading"
 
       style="width: 100%;">
-
       <el-table-column
-        prop="companyId"
+        prop="createTime"
         header-align="center"
         align="center"
-        label="公司编号">
+        :formatter="dateFormat"
+        label="日期">
       </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="companyId"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="公司编号">-->
+      <!--</el-table-column>-->
       <el-table-column
 
         header-align="center"
@@ -38,19 +44,13 @@
         </template>
 
       </el-table-column>
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        :formatter="dateFormat"
-        label="时间">
-      </el-table-column>
-      <el-table-column
-        prop="companyName"
-        header-align="center"
-        align="center"
-        label="公司名称">
-      </el-table-column>
+
+      <!--<el-table-column-->
+        <!--prop="companyName"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="公司名称">-->
+      <!--</el-table-column>-->
 
       <el-table-column
         prop="productName"
@@ -62,30 +62,35 @@
         prop="linkUrl"
         header-align="center"
         align="center"
-        label="链接">
+        label="产品链接">
       </el-table-column>
       <el-table-column
         prop="price"
         header-align="center"
         align="center"
-        label="单价">
+        label="合作单价">
         <template slot-scope="scope">
           <span>{{scope.row.price}}元</span>
         </template>
       </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="contactName"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="对接人">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--prop="contactMobile"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="联系方式">-->
+      <!--</el-table-column>-->
       <el-table-column
-        prop="contactName"
-        header-align="center"
-        align="center"
-        label="对接人">
+      prop="contactName"
+      header-align="center"
+      align="center"
+      label="当日点击数上限">
       </el-table-column>
-      <el-table-column
-        prop="contactMobile"
-        header-align="center"
-        align="center"
-        label="联系方式">
-      </el-table-column>
-
       <el-table-column
         fixed="right"
         header-align="center"
@@ -144,7 +149,7 @@
         if (date === undefined || date == null) {
           return ''
         }
-        return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
+        return formatDate(new Date(date), 'yyyy-MM-dd')
       },
       // 获取数据列表
       getDataList () {

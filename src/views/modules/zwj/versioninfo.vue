@@ -67,6 +67,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button v-if="isAuth('zwj:versioninfo:edit')" type="text" size="small" @click="addOrUpdateHandle(scope.row)">修改</el-button>
+          <el-button v-if="isAuth('generation:openScreen:delete')" type="text" size="small" @click="deleteHandle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -172,15 +173,17 @@
       // 删除
       deleteHandle (item) {
         console.log(item)
-        this.$confirm(`确定对[${item.title}]进行删除批量删除操作?`, '提示', {
+        this.$confirm(`确定对[${item.version}]进行删除操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/generation/openScreen/delete'),
+            url: this.$http.adornUrl('/generation/appVersion/delete'),
             method: 'post',
-            data: [item.id]
+            params: this.$http.adornParams({
+              id: item.id
+            })
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({

@@ -73,6 +73,12 @@
         label="设备">
       </el-table-column>
       <el-table-column
+        prop="ip"
+        header-align="center"
+        align="center"
+        label="ip">
+      </el-table-column>
+      <el-table-column
         prop="market"
         header-align="center"
         align="center"
@@ -95,7 +101,7 @@
         header-align="center"
         align="center"
         :formatter="dateFormat"
-        label="注册时间">
+        label="激活时间">
       </el-table-column>
       <el-table-column
         prop="lastLoginTime"

@@ -179,6 +179,7 @@
             'token':this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
+            'productName' : this.dataForm.productName
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
