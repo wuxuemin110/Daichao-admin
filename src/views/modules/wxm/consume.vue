@@ -1,25 +1,37 @@
 <template>
   <div class="mod-config">
-    <!--<el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">-->
-      <!--&lt;!&ndash;<el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input v-model="dataForm.companyId" placeholder="输入公司ID查询" clearable></el-input>&ndash;&gt;-->
-      <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-      <!--&lt;!&ndash;<el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input v-model="dataForm.companyName" placeholder="输入公司名字查询" clearable></el-input>&ndash;&gt;-->
-      <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-      <!--<el-form-item>-->
-        <!--<el-input v-model="dataForm.productName" placeholder="输入产品名字查询" clearable></el-input>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item>-->
-        <!--<el-button @click="getDataList()">查询</el-button>-->
-        <!--&lt;!&ndash;<el-button v-if="isAuth('generation:banner:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>&ndash;&gt;-->
-      <!--</el-form-item>-->
-    <!--</el-form>-->
+    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+      <el-form-item>
+        <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.productDisplayNum" placeholder="产品编号" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="日期" >
+        <el-date-picker
+          unlink-panels
+          v-model="dataForm.date"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList()">查询</el-button>
+        <!--<el-button v-if="isAuth('generation:banner:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
+      </el-form-item>
+      <el-form-item>
+        <el-button   @click="Download()" type="primary">导出列表</el-button>
+      </el-form-item>
+    </el-form>
     <el-table
       :data="dataList"
       border
       v-loading="dataListLoading"
-
+      :summary-method="getSummaries"
+      show-summary
       style="width: 100%;">
 
       <el-table-column
@@ -35,6 +47,18 @@
         label="产品名称">
       </el-table-column>
       <el-table-column
+        prop="status"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status == 0">上架</span>
+          <span v-if="scope.row.status == 1">自动下架</span>
+          <span v-if="scope.row.status == 2">手动下架</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
         prop="sumClickComplete"
         header-align="center"
         align="center"
@@ -47,17 +71,7 @@
         align="center"
         label="累计结算注册数">
       </el-table-column>
-      <el-table-column
-        prop="status"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status == 0">上架</span>
-          <span v-if="scope.row.status == 1">自动下架</span>
-          <span v-if="scope.row.status == 2">手动下架</span>
-        </template>
-      </el-table-column>
+
       <el-table-column
         prop="conversionRate"
         header-align="center"
@@ -67,6 +81,17 @@
           <span>{{scope.row.conversionRate}}%</span>
         </template>
       </el-table-column>
+
+      <el-table-column
+        prop="price"
+        header-align="center"
+        align="center"
+        label="合作单价">
+        <template slot-scope="scope">
+          <span>{{scope.row.price}}元</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         prop="balance"
         header-align="center"
@@ -76,15 +101,7 @@
           <span>{{scope.row.balance}}元</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="price"
-        header-align="center"
-        align="center"
-        label="单价">
-        <template slot-scope="scope">
-          <span>{{scope.row.price}}元</span>
-        </template>
-      </el-table-column>
+
       <el-table-column
         prop="residualClick"
         header-align="center"
@@ -136,9 +153,9 @@
     data () {
       return {
         dataForm: {
-          companyId: null,
-          companyName:null,
-          productName:null
+          productName: null,
+          productDisplayNum: null,
+          date: null
         },
         dataList: [],
         pageIndex: 1,
@@ -146,7 +163,8 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        allList:['合计']
       }
     },
     components: {
@@ -154,8 +172,33 @@
     },
     activated () {
       this.getDataList()
+      this.getALLdataList()
     },
     methods: {
+      getSummaries(param){
+
+        return this.allList;
+      },
+      Download () {
+        window.location.href = this.$http.adornUrl(`/sys/report/consumeReportDownload?token=${this.$cookie.get('token')}${this.dataForm.productName ? '&productName=' + this.dataForm.productName : ''}${this.dataForm.productDisplayNum ? '&productDisplayNum=' + this.dataForm.productDisplayNum : ''}${this.dataForm.startDate ? '&startDate=' + this.dataForm.startDate : ''}${this.dataForm.endDate ? '&endDate=' + this.dataForm.endDate : ''}&page=${this.pageIndex}&limit=${this.pageSize}`)
+      },
+      //获取合计
+      getALLdataList(){
+        this.$http({
+          url: this.$http.adornUrl(`/generation/companyProduct/consume/sumCount`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'token': this.$cookie.get('token'),
+          })
+        }).then(({data})=>{
+          if (data && data.code === 0) {
+            this.allList[3] = data.list[0]
+            this.allList[4] = data.list[1]
+            this.allList[5] = data.list[2]
+
+          }
+        })
+      },
       dateFormat (row, column) {
         var date = row[column.property]
         if (date === undefined || date == null) {
@@ -173,9 +216,10 @@
             'token':this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'companyId': this.dataForm.companyId || null,
-            'companyName':this.dataForm.companyName || null,
-            'productName':this.dataForm.productName || null
+            'productName': this.dataForm.productName || null,
+            'productDisplayNum': this.dataForm.productDisplayNum || null,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -202,7 +246,7 @@
 
       // 新增 / 修改
       addOrUpdateHandle (id) {
-        console.log(id)
+
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)

@@ -1,10 +1,13 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item  v-if="isAuth('loan:channel:list')" label="渠道名">
-        <el-input v-model="dataForm.channelName" placeholder="渠道名" clearable style="width: 150px;"></el-input>
+      <el-form-item  v-if="isAuth('loan:channel:list')" >
+        <el-input v-model="dataForm.channelName" placeholder="渠道名称" clearable style="width: 150px;"></el-input>
       </el-form-item>
-      <el-form-item label="添加时间">
+      <el-form-item  v-if="isAuth('loan:channel:list')" >
+        <el-input v-model="dataForm.channelId" placeholder="渠道编号" clearable style="width: 150px;"></el-input>
+      </el-form-item>
+      <el-form-item label="日期">
         <el-date-picker
           v-model="dataForm.createTime"
           type="daterange"
@@ -26,13 +29,11 @@
       border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
+
+      :summary-method="getSummaries"
+      show-summary
       >
-<!--       <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
-      </el-table-column> -->
+
       <el-table-column
         prop="createTime"
         header-align="center"
@@ -53,7 +54,7 @@
         header-align="center"
         align="center"
         width="150"
-        label="渠道名">
+        label="渠道名称">
       </el-table-column>
       <el-table-column
         v-if="isAuth('loan:channel:listInfo')"
@@ -204,7 +205,8 @@
         dataForm: {
           channelName: null,
           saleUserName: null,
-          createTime: null
+          createTime: null,
+          channelId:null
         },
         dataList: [],
         pageIndex: 1,
@@ -225,7 +227,8 @@
         dataListLoading2: false,
         dataListSelections2: [],
         addOrUpdateVisible2: false,
-        addOrUpdateVisible3: false
+        addOrUpdateVisible3: false,
+        allList:['合计']
       }
     },
     components: {
@@ -235,11 +238,14 @@
     },
     activated () {
       this.getDataList2()
-      console.log(this.$store.state.user.channelId)
-        this.getDataList()
+      this.getALLdataList()
+      this.getDataList()
 
     },
     methods: {
+      getSummaries(param){
+        return this.allList;
+      },
       dateFormat (row, column) {
         var date = row[column.property]
         if (date === undefined || date == null) {
@@ -257,7 +263,7 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'channelName': this.dataForm.channelName,
-            'channelId': this.$store.state.user.channelId?this.$store.state.user.channelId : '',
+            'channelId': this.$store.state.user.channelId?this.$store.state.user.channelId : this.dataForm.channelId,
             'saleUserName': this.dataForm.saleUserName,
             'startTime': this.dataForm.createTime !== null ? this.dataForm.createTime[0] : null,
             'endTime': this.dataForm.createTime !== null ? this.dataForm.createTime[1] + 86400000 : null
@@ -271,6 +277,22 @@
             this.totalPage = 0
           }
           this.dataListLoading = false
+        })
+      },
+      //获取合计
+      getALLdataList(){
+        this.$http({
+          url: this.$http.adornUrl(`/sys/channel/getSum`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'token': this.$cookie.get('token'),
+          })
+        }).then(({data})=>{
+          if (data && data.code === 0) {
+            this.allList[3] = data.list[0]
+            this.allList[4] = data.list[1]
+            this.allList[5] = data.list[2]
+          }
         })
       },
       // 获取数据列表

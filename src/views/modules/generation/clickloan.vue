@@ -25,7 +25,8 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
-
+      :summary-method="getSummaries"
+      show-summary
       style="width: 100%;">
 
       <el-table-column
@@ -123,13 +124,36 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        allList:['合计']
       }
     },
     activated () {
       this.getDataList()
+      this.getALLdataList()
     },
     methods: {
+      //获取合计
+      getSummaries(param){
+        return this.allList;
+      },
+      getALLdataList(){
+        this.$http({
+          url: this.$http.adornUrl(`/generation/clickloans/clickSum`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'token': this.$cookie.get('token'),
+          })
+        }).then(({data})=>{
+          if (data && data.code === 0) {
+            this.allList[3] = data.list[0]
+            this.allList[4] = data.list[1]
+            this.allList[5] = data.list[2]
+            this.allList[6] = data.list[3]
+            this.allList[7] = data.list[4]
+          }
+        })
+      },
       dateFormat (row, column) {
         var date = row[column.property]
         if (date === undefined || date == null) {

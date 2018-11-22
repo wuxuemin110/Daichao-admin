@@ -181,7 +181,7 @@
             'token':this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'productNum': this.dataForm.productNum || null,
+            'productDisplayNum': this.dataForm.productNum || null,
             'productName':this.dataForm.productName || null,
             'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
             'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null

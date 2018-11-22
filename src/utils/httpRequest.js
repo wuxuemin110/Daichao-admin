@@ -30,9 +30,14 @@ http.interceptors.response.use(response => {
 
   if (response.data && response.data.code === 401) { // 401, token失效
     Vue.cookie.delete('token')
-    router.push({ name: 'login' }, () => {
-      location.reload() // 刷新页面, 清空整站临时存储数据
-    })
+    Vue.prototype.$alert('登录已过期或在其他设备登录', '提示', {
+      confirmButtonText: '确定',
+      callback: action => {
+        router.push({ name: 'login' }, () => {
+          location.reload() // 刷新页面, 清空整站临时存储数据
+        })
+      }
+    });
   }
   return response
 }, error => {

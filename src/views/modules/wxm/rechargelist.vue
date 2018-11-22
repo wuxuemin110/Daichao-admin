@@ -2,10 +2,10 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.productName" placeholder="产品名称查询" clearable></el-input>
+        <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.productDisplayNum" placeholder="产品编号查询" clearable></el-input>
+        <el-input v-model="dataForm.productDisplayNum" placeholder="产品编号" clearable></el-input>
       </el-form-item>
       <el-form-item label="日期" >
         <el-date-picker
@@ -30,6 +30,8 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
+      :summary-method="getSummaries"
+      show-summary
       style="width: 100%;">
 
       <el-table-column
@@ -120,7 +122,8 @@
         dataListLoading: false,
         fullscreenLoading: false,
         addOrUpdateVisible: false,
-        dataListSelections: []
+        dataListSelections: [],
+        allList:['合计']
       }
     },
     components: {
@@ -128,8 +131,13 @@
     },
     activated () {
       this.getDataList()
+      this.getALLdataList()
     },
     methods: {
+      getSummaries(param){
+
+        return this.allList;
+      },
       dateFormat (row, column) {
         var date = row[column.property]
         if (date === undefined || date == null) {
@@ -139,6 +147,23 @@
       },
       Download () {
         window.location.href = this.$http.adornUrl(`/sys/report/rechargeReportDownload?token=${this.$cookie.get('token')}${this.dataForm.productName ? '&productName=' + this.dataForm.productName : ''}${this.dataForm.productDisplayNum ? '&productDisplayNum=' + this.dataForm.productDisplayNum : ''}${this.dataForm.startDate ? '&startDate=' + this.dataForm.startDate : ''}${this.dataForm.endDate ? '&endDate=' + this.dataForm.endDate : ''}`)
+      },
+      //获取合计
+      getALLdataList(){
+        this.$http({
+          url: this.$http.adornUrl(`/generation/companyRecharge/sumCount`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'token': this.$cookie.get('token'),
+          })
+        }).then(({data})=>{
+          if (data && data.code === 0) {
+
+            this.allList[2] = data.list[0]
+            this.allList[3] = data.list[1]
+            this.allList[4] = data.list[2]
+          }
+        })
       },
       // 获取数据列表
       getDataList () {

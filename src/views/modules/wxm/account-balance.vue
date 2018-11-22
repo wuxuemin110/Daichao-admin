@@ -118,11 +118,7 @@
           }).then(({data})=>{
             if (data && data.code === 0){
               this.dataForm.clickComplete = data.clickComplete
-             /* if(this.dataForm.clickComplete == 0){
-                this.dataForm.conversionRate = 0
-              }else {
-                this.dataForm.conversionRate = (this.dataForm.settedRegistered/this.dataForm.clickComplete)*100
-              }*/
+
 
             }else {
               this.$message.error(data.msg)
@@ -145,7 +141,6 @@
               params: this.$http.adornParams({
                 'token':this.$cookie.get('token'),
                 'productId':this.dataForm.productId,
-                //'conversionRate':this.dataForm.conversionRate,
                 'totalRecharge':this.dataForm.totalRecharge,
                 'price':this.dataForm.price,
                 'clickComplete':this.dataForm.clickComplete,
@@ -153,7 +148,8 @@
                 'totalRecharge':this.dataForm.totalRecharge,
                 'settedCount':this.dataForm.price * this.dataForm.settedRegistered,
                 'status':1,
-                'createTime':this.dataForm.date
+                'createTime':this.dataForm.date,
+                'uid': this.$store.state.user.id
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

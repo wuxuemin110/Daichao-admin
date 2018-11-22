@@ -2,11 +2,11 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.productName" placeholder="产品名称查询" clearable></el-input>
+        <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
       </el-form-item>
-      <!--<el-form-item>-->
-        <!--<el-input v-model="dataForm.productDisplayNum" placeholder="产品编号查询" clearable></el-input>-->
-      <!--</el-form-item>-->
+      <el-form-item>
+        <el-input v-model="dataForm.productDisplayNum" placeholder="产品编号" clearable></el-input>
+      </el-form-item>
       <el-form-item label="日期" >
         <el-date-picker
           unlink-panels
@@ -20,7 +20,6 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-
       </el-form-item>
       <el-form-item>
         <el-button  v-loading.fullscreen.lock="fullscreenLoading"  @click="Download()" type="primary">导出列表</el-button>
@@ -30,8 +29,10 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
-      style="width: 100%;">
+      :summary-method="getSummaries"
+      show-summary
 
+      style="width: 100%;">
       <el-table-column
         prop="productDisplayNum"
         header-align="center"
@@ -42,36 +43,40 @@
         prop="productName"
         header-align="center"
         align="center"
-        label="产品名字">
-      </el-table-column>
-
-      <el-table-column
-        prop="price"
-        header-align="center"
-        align="center"
-
-        label="单价">
-        <template slot-scope="scope">
-          <span>{{scope.row.price }}元</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        prop="balance"
-        header-align="center"
-        align="center"
-
-        label="余额">
-        <template slot-scope="scope">
-          <span>{{scope.row.balance }}元</span>
-        </template>
+        label="产品名称">
       </el-table-column>
       <el-table-column
         prop="clickComplete"
         header-align="center"
         align="center"
-
         label="点击数">
+      </el-table-column>
+
+      <el-table-column
+        prop="settedRegistered"
+        header-align="center"
+        align="center"
+        label="结算注册数">
+      </el-table-column>
+
+
+      <el-table-column
+        prop="conversionRate"
+        header-align="center"
+        align="center"
+        label="注册转化率">
+        <template slot-scope="scope">
+          <span>{{scope.row.conversionRate }}%</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="price"
+        header-align="center"
+        align="center"
+        label="合作单价">
+        <template slot-scope="scope">
+          <span>{{scope.row.price }}元</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="settedCount"
@@ -83,29 +88,8 @@
           <span>{{scope.row.settedCount }}元</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="settedRegistered"
-        header-align="center"
-        align="center"
 
-        label="结算注册数">
-      </el-table-column>
-      <el-table-column
-        prop="conversionRate"
-        header-align="center"
-        align="center"
-        label="注册转化率">
-        <template slot-scope="scope">
-          <span>{{scope.row.conversionRate }}%</span>
-        </template>
-      </el-table-column>
 
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        label="结算时间">
-      </el-table-column>
       <el-table-column
         prop="totalRecharge"
         header-align="center"
@@ -116,7 +100,30 @@
         </template>
       </el-table-column>
 
+      <el-table-column
+        prop="balance"
+        header-align="center"
+        align="center"
+        label="余额">
+        <template slot-scope="scope">
+          <span>{{scope.row.balance }}元</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="userName"
+        header-align="center"
+        align="center"
+        label="操作员">
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="center"
+        label="结算时间">
+      </el-table-column>
     </el-table>
+
     <el-pagination
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
@@ -141,13 +148,15 @@
           date: null
         },
         dataList: [],
+
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
         fullscreenLoading: false,
         dataListLoading: false,
         addOrUpdateVisible: false,
-        dataListSelections: []
+        dataListSelections: [],
+        allList:['合计']
       }
     },
     components: {
@@ -155,8 +164,13 @@
     },
     activated () {
       this.getDataList()
+      this.getALLdataList()
     },
     methods: {
+      getSummaries(param){
+
+        return this.allList;
+      },
       dateFormat (row, column) {
         var date = row[column.property]
         if (date === undefined || date == null) {
@@ -191,6 +205,25 @@
             this.totalPage = 0
           }
           this.dataListLoading = false
+        })
+      },
+      //获取合计
+      getALLdataList(){
+        this.$http({
+          url: this.$http.adornUrl(`/generation/companyProduct/balance/sumCount`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'token': this.$cookie.get('token'),
+          })
+        }).then(({data})=>{
+          if (data && data.code === 0) {
+             this.allList[2] = data.list[0] + '次'
+            this.allList[3] = data.list[1]
+            this.allList[4] = data.list[2] + '%'
+            this.allList[6] = data.list[3] + '元'
+            this.allList[7] = data.list[4] + '元'
+            this.allList[8] = data.list[5]+ '元'
+          }
         })
       },
       // 每页数
