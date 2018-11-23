@@ -20,6 +20,9 @@
         <!--<el-button v-if="isAuth('sys:channel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
 
       </el-form-item>
+      <el-form-item>
+        <el-button  v-loading.fullscreen.lock="fullscreenLoading"  @click="Download()"   type="primary">导出列表</el-button>
+      </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
@@ -123,7 +126,8 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        fullscreenLoading: false
       }
     },
     activated () {
@@ -136,6 +140,9 @@
           return ''
         }
         return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
+      },
+      Download () {
+        window.location.href = this.$http.adornUrl(`/sys/report/clickReportDownload?token=${this.$cookie.get('token')}${this.pageIndex ? '&page=' + this.pageIndex : ''}${this.pageSize ? '&limit=' + this.pageSize : ''}${this.dataForm.loanName ? '&loanName=' + this.dataForm.loanName : ''}${this.dataForm.startTime ? '&startTime=' + this.dataForm.startTime : ''}${this.dataForm.endTime ? '&endTime=' + this.dataForm.endTime : ''}`)
       },
       // 获取数据列表
       getDataList () {

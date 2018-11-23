@@ -165,7 +165,7 @@
         return formatDate(new Date(date), 'yyyy-MM-dd hh:mm:ss')
       },
       Download () {
-        window.location.href = this.$http.adornUrl(`/sys/report/productBalanceReportDownload?token=${this.$cookie.get('token')}${this.dataForm.productName ? '&productName=' + this.dataForm.productName : ''}${this.dataForm.productDisplayNum ? '&productDisplayNum=' + this.dataForm.productDisplayNum : ''}${this.dataForm.startDate ? '&startDate=' + this.dataForm.startDate : ''}${this.dataForm.endDate ? '&endDate=' + this.dataForm.endDate : ''}`)
+        window.location.href = this.$http.adornUrl(`/sys/report/productBalanceReportDownload?token=${this.$cookie.get('token')}${this.pageIndex ? '&page=' + this.pageIndex : ''}${this.pageSize ? '&limit=' + this.pageSize : ''}${this.dataForm.productName ? '&productName=' + this.dataForm.productName : ''}${this.dataForm.productDisplayNum ? '&productDisplayNum=' + this.dataForm.productDisplayNum : ''}${this.dataForm.startDate ? '&startDate=' + this.dataForm.startDate : ''}${this.dataForm.endDate ? '&endDate=' + this.dataForm.endDate : ''}`)
       },
       // 获取数据列表
       getDataList () {
