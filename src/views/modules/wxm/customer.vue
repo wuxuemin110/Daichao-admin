@@ -2,13 +2,21 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.companyId" placeholder="输入公司ID查询" clearable></el-input>
+        <el-input v-model="dataForm.productDisplayNum" placeholder="产品编号" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.companyName" placeholder="输入公司名字查询" clearable></el-input>
+        <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.productName" placeholder="输入产品名字查询" clearable></el-input>
+      <el-form-item label="日期" >
+        <el-date-picker
+          unlink-panels
+          v-model="dataForm.date"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -124,9 +132,9 @@
     data () {
       return {
         dataForm: {
-          companyId: null,
-          companyName:null,
-          productName:null
+          productDisplayNum: null,
+          productName:null,
+          date:null
         },
         dataList: [],
         pageIndex: 1,
@@ -158,12 +166,13 @@
           url: this.$http.adornUrl(`/generation/companyProduct/list`),
           method: 'get',
           params: this.$http.adornParams({
-            'token':this.$cookie.get('token'),
+            'token': this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'companyId': this.dataForm.companyId || null,
-            'companyName':this.dataForm.companyName || null,
-            'productName':this.dataForm.productName || null
+            'productName': this.dataForm.productName || null,
+            'productDisplayNum': this.dataForm.productDisplayNum || null,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

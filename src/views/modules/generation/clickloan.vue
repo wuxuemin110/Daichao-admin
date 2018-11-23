@@ -1,8 +1,11 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item label="贷超名称">
-        <el-input v-model="dataForm.loanName" placeholder="贷超名称" clearable style="width: 150px;"></el-input>
+      <el-form-item>
+        <el-input v-model="dataForm.productDisplayNum" placeholder="产品编号" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
       </el-form-item>
       <el-form-item label="点击时间">
         <el-date-picker
@@ -117,8 +120,9 @@
     data () {
       return {
         dataForm: {
-          loanName: null,
-          createTime: null
+          productName: null,
+          productDisplayNum: null,
+          date: null
         },
         isTrue: false,
         dataList: [],
@@ -184,11 +188,13 @@
           url: this.$http.adornUrl(`/generation/clickloans/all/list`),
           method: 'get',
           params: this.$http.adornParams({
+            'token': this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'loanName': this.dataForm.loanName,
-            'startTime': this.dataForm.createTime !== null ? this.dataForm.createTime[0] : null,
-            'endTime': this.dataForm.createTime !== null ? this.dataForm.createTime[1] : null
+            'productName': this.dataForm.productName || null,
+            'productDisplayNum': this.dataForm.productDisplayNum || null,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

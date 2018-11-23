@@ -5,7 +5,7 @@
         <el-input v-model="dataForm.mobile" placeholder="用户名" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="dataForm.channelId" placeholder="渠道名称">
+        <el-select clearable v-model="dataForm.channelId" placeholder="渠道名称">
           <el-option
             v-for="item in selectList"
             :key="item.id"
