@@ -5,7 +5,7 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="130px">
       <el-form-item label="产品名称" prop="productName">
-        <el-input v-model="dataForm.productName" maxlength="30" placeholder="产品名称"></el-input>
+        <el-input v-model="dataForm.productName"  placeholder="产品名称"></el-input>
       </el-form-item>
       <el-form-item label="公司名称" prop="companyId">
       <el-select v-model="dataForm.companyId" placeholder="请选择">
@@ -18,19 +18,19 @@
       </el-select>
       </el-form-item>
       <el-form-item label="链接地址" prop="linkUrl">
-        <el-input v-model="dataForm.linkUrl" maxlength="30" placeholder="链接地址"></el-input>
+        <el-input v-model="dataForm.linkUrl" placeholder="链接地址"></el-input>
       </el-form-item>
       <el-form-item label="单价" prop="price">
-        <el-input v-model="dataForm.price" maxlength="30" placeholder="单价"></el-input>
+        <el-input v-model="dataForm.price"  placeholder="单价"></el-input>
       </el-form-item>
       <el-form-item label="当日点击数上限" prop="price">
-        <el-input v-model="dataForm.sumClickComplete" maxlength="30" placeholder="点击数上限"></el-input>
+        <el-input v-model="dataForm.sumClickComplete"  placeholder="点击数上限"></el-input>
       </el-form-item>
       <!--<el-form-item label="联系人" prop="contactName">-->
-        <!--<el-input v-model="dataForm.contactName" maxlength="30" placeholder="联系人"></el-input>-->
+        <!--<el-input v-model="dataForm.contactName"  placeholder="联系人"></el-input>-->
       <!--</el-form-item>-->
       <!--<el-form-item label="联系号码" prop="contactMobile">-->
-        <!--<el-input v-model="dataForm.contactMobile" maxlength="30" placeholder="联系号码"></el-input>-->
+        <!--<el-input v-model="dataForm.contactMobile"  placeholder="联系号码"></el-input>-->
       <!--</el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -160,3 +160,10 @@
     }
   }
 </script>
+<style>
+  .el-form-item::after{
+    display: block;
+    content: '';
+    clear: both;
+  }
+</style>

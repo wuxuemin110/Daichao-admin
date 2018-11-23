@@ -14,7 +14,7 @@
         ></el-autocomplete>
       </el-form-item>
       <el-form-item label="标题" prop="title">
-        <el-input v-model="dataForm.title" maxlength="30" placeholder="标题"></el-input>
+        <el-input v-model="dataForm.title"  placeholder="标题"></el-input>
       </el-form-item>
       <el-form-item label="广告图" prop="loanIconUrl">
         <el-upload

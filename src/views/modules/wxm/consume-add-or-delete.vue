@@ -1,20 +1,20 @@
 <template>
   <el-dialog
-    :title="dataForm.productId == null ? '新增' : '修改'"
+    title="修改"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="产品编号" prop="productDisplayNum">
-        <el-input disabled v-model="dataForm.productDisplayNum" maxlength="30" placeholder="产品编号"></el-input>
+        <el-input disabled v-model="dataForm.productDisplayNum"  placeholder="产品编号"></el-input>
       </el-form-item>
       <el-form-item label="产品名称" prop="productName">
-        <el-input disabled v-model="dataForm.productName" maxlength="30" placeholder="产品名称"></el-input>
+        <el-input disabled v-model="dataForm.productName"  placeholder="产品名称"></el-input>
       </el-form-item>
       <el-form-item label="剩余点击次数" prop="adjustClick">
-        <el-input v-model="dataForm.adjustClick" maxlength="30" placeholder="剩余点击次数"></el-input>
+        <el-input v-model="dataForm.adjustClick"  placeholder="剩余点击次数"></el-input>
       </el-form-item>
       <el-form-item label="单日点击上限" prop="clickLimit">
-        <el-input v-model="dataForm.clickLimit" maxlength="30" placeholder="单日点击上限"></el-input>
+        <el-input v-model="dataForm.clickLimit"  placeholder="单日点击上限"></el-input>
       </el-form-item>
       <el-form-item label="状态"  prop="status" >
         <template>
@@ -54,7 +54,6 @@
   },
     methods: {
       init (item) {
-        console.log(item)
         this.visible = true
         if (item) {
           this.$http({
@@ -72,7 +71,7 @@
               this.status = (data.companyProductConsume.status + '')
               this.dataForm.adjustClick = data.companyProductConsume.adjustClick-0
               this.dataForm.clickLimit = data.companyProductConsume.clickLimit-0
-              // console.log(this.status)
+
             } else {
               this.$message.error(data.msg)
             }
@@ -95,7 +94,8 @@
                 'id': this.dataForm.id,
                 'adjustClick': this.dataForm.adjustClick,
                 'clickLimit': this.dataForm.clickLimit,
-                'status' : this.status
+                'status' : this.status,
+                'uid': this.$store.state.user.id
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

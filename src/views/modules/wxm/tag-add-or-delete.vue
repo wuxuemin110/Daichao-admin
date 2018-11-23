@@ -5,7 +5,7 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="标签名称" prop="typeName">
-        <el-input v-model="dataForm.typeName" maxlength="30" placeholder="标签名称"></el-input>
+        <el-input v-model="dataForm.typeName"  placeholder="标签名称"></el-input>
       </el-form-item>
       <el-form-item label="所属分类" prop="superTypeId">
         <el-select v-model="dataForm.superTypeId" placeholder="请选择">
@@ -39,7 +39,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="首页排序" prop="level">
-        <el-input v-model="dataForm.level" maxlength="30" placeholder="排序"></el-input>
+        <el-input v-model="dataForm.level"  placeholder="排序"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

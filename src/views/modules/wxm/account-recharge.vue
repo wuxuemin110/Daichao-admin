@@ -7,13 +7,13 @@
 
 
       <el-form-item label="产品编号" prop="recharge">
-        <el-input :disabled="true" v-model="productDisplayNum" maxlength="30" placeholder="充值数"></el-input>
+        <el-input :disabled="true" v-model="productDisplayNum"  placeholder="充值数"></el-input>
       </el-form-item>
       <el-form-item label="产品名称" prop="recharge">
-        <el-input :disabled="true" v-model="productName" maxlength="30" placeholder="充值数"></el-input>
+        <el-input :disabled="true" v-model="productName"  placeholder="充值数"></el-input>
       </el-form-item>
       <el-form-item label="充值数" prop="recharge">
-        <el-input v-model="dataForm.recharge" maxlength="30" placeholder="充值数"></el-input>
+        <el-input v-model="dataForm.recharge"  placeholder="充值数"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

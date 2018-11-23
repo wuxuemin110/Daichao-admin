@@ -5,11 +5,11 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="版本号" prop="version">
-        <el-input v-model="dataForm.version" maxlength="30" placeholder="版本号"></el-input>
+        <el-input v-model="dataForm.version"  placeholder="版本号"></el-input>
       </el-form-item>
 
     <el-form-item label="版本描述" prop="updateDesc">
-      <el-input type="textarea" v-model="dataForm.updateDesc" maxlength="30" placeholder="版本描述"></el-input>
+      <el-input type="textarea" v-model="dataForm.updateDesc"  placeholder="版本描述"></el-input>
     </el-form-item>
 
     <el-form-item label="强制更新" >
@@ -19,7 +19,7 @@
       </template>
     </el-form-item>
       <el-form-item label="下载地址" prop="updateDesc">
-        <el-input  v-model="dataForm.downloadUrl" maxlength="30" placeholder="下载地址"></el-input>
+        <el-input  v-model="dataForm.downloadUrl"  placeholder="下载地址"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

@@ -5,7 +5,7 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="银行名称" prop="bankName">
-        <el-input v-model="dataForm.bankName" maxlength="30" placeholder="银行名称"></el-input>
+        <el-input v-model="dataForm.bankName"  placeholder="银行名称"></el-input>
       </el-form-item>
       <el-form-item label="图标" prop="bankIconUrl">
         <el-upload

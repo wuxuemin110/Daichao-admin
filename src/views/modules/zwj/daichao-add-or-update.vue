@@ -5,16 +5,16 @@
     :visible.sync="visible">
     <el-form :model="dataForm"  ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="手机号" prop="bannerTitle">
-        <el-input v-model="dataForm.phone" @blur="testPhone"  maxlength="30" placeholder="手机号"></el-input>
+        <el-input v-model="dataForm.phone" @blur="testPhone"   placeholder="手机号"></el-input>
       </el-form-item>
       <el-form-item v-if="userInfo" label="用户名" prop="bannerTitle">
-        <el-input v-model="userInfo.realName" disabled maxlength="30" placeholder="手机号"></el-input>
+        <el-input v-model="userInfo.realName" disabled  placeholder="手机号"></el-input>
       </el-form-item>
       <el-form-item label="借款金额" prop="bannerTitle">
-        <el-input v-model="dataForm.amount"   maxlength="30" placeholder="借款金额"></el-input>
+        <el-input v-model="dataForm.amount"    placeholder="借款金额"></el-input>
       </el-form-item>
       <el-form-item  v-if="userInfo" label="收款银行卡" prop="bannerTitle">
-        <el-input v-model="userInfo.idCardNo"  disabled  maxlength="30" placeholder="收款银行卡"></el-input>
+        <el-input v-model="userInfo.idCardNo"  disabled   placeholder="收款银行卡"></el-input>
       </el-form-item>
       <el-form-item label="借款用途" prop="bannerTitle">
         <el-radio v-model="dataForm.purpose" label="1">旅游娱乐</el-radio>

@@ -5,7 +5,7 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="版本号" prop="version">
-        <el-input v-model="dataForm.version" maxlength="30" placeholder="请填写版本号"></el-input>
+        <el-input v-model="dataForm.version"  placeholder="请填写版本号"></el-input>
       </el-form-item>
 
       <el-form-item label="标识" prop="code">

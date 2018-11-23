@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <!--<el-dialog title="修改阈值" :visible.sync="innervisible" append-to-body>-->
-      <!--<el-input style="min-width: 200px;"  v-model="dataForm.changeoffCount" maxlength="30" placeholder="自动下架阈值"></el-input>-->
+      <!--<el-input style="min-width: 200px;"  v-model="dataForm.changeoffCount"  placeholder="自动下架阈值"></el-input>-->
       <!--<span slot="footer" class="dialog-footer">-->
       <!--<el-button @click="innervisible = false">取消</el-button>-->
       <!--<el-button type="primary" @click="change()">确定</el-button>-->
@@ -21,7 +21,7 @@
         ></el-autocomplete>
       </el-form-item>
       <!--<el-form-item label="标题" prop="loanName">-->
-        <!--<el-input v-model="dataForm.loanName" maxlength="30" placeholder="标题"></el-input>-->
+        <!--<el-input v-model="dataForm.loanName"  placeholder="标题"></el-input>-->
       <!--</el-form-item>-->
       <el-form-item label="icon图" prop="loanIconUrl">
         <el-upload
@@ -36,7 +36,7 @@
       </el-form-item>
 
       <!--<el-form-item label="热点" prop="hotTag">-->
-          <!--<el-input v-model="dataForm.hotTag" maxlength="30" placeholder="热点"></el-input>-->
+          <!--<el-input v-model="dataForm.hotTag"  placeholder="热点"></el-input>-->
         <!--</el-form-item>-->
       <el-form-item label="首页推荐" prop="orderNum" >
         <template>
@@ -45,18 +45,18 @@
         </template>
       </el-form-item>
       <el-form-item label="最小金额" prop="minAmount">
-          <el-input-number v-model="dataForm.minAmount" maxlength="30" placeholder="最小金额"></el-input-number>元
+          <el-input-number v-model="dataForm.minAmount"  placeholder="最小金额"></el-input-number>元
         </el-form-item>
       <el-form-item label="最大金额" prop="maxAmount">
-          <el-input-number v-model="dataForm.maxAmount" maxlength="30" placeholder="最大金额"></el-input-number>元
+          <el-input-number v-model="dataForm.maxAmount"  placeholder="最大金额"></el-input-number>元
 
         </el-form-item><el-form-item label="周期" prop="days">
-          <el-input-number v-model="dataForm.days" maxlength="30" placeholder="周期"></el-input-number>天
+          <el-input-number v-model="dataForm.days"  placeholder="周期"></el-input-number>天
         </el-form-item>
 
       <el-form-item label="标签" >
         <el-collapse style="padding: 0;" class="el-input__inner">
-          <div  v-bind:style="{height:selectColor.length>6?'auto':'38px'}"  class="tagList colorBQ"><el-tag
+          <div   class="tagList colorBQ"><el-tag
 
             v-for="tag in selectTab"
             :key="tag.typeName"
@@ -77,18 +77,18 @@
         </el-form-item>
       <div class="tabWrap" v-if="selectTab.length>0">
         <el-form-item :key="item.typeId" :label="item.typeName" v-for="item in selectTab">
-          <el-input-number v-model="item.level" maxlength="30" placeholder="排序"></el-input-number>
+          <el-input-number v-model="item.level"  placeholder="排序"></el-input-number>
         </el-form-item>
       </div>
       	  <!--<el-form-item label="公积金" prop="provideSecs">-->
-          <!--<el-input v-model="dataForm.provideSecs" maxlength="30" placeholder="公积金"></el-input>-->
+          <!--<el-input v-model="dataForm.provideSecs"  placeholder="公积金"></el-input>-->
         <!--</el-form-item>-->
       <el-form-item label="热门标签" prop="hotTag">
-        <el-input v-model="dataForm.hotTag" maxlength="30" placeholder="多个热门标签使用逗号分隔,每个标签的字数不要超过4个"></el-input>
+        <el-input v-model="dataForm.hotTag"  placeholder="多个热门标签使用逗号分隔,每个标签的字数不要超过4个"></el-input>
       </el-form-item>
       <el-form-item  label="颜色编码" prop="color">
         <el-collapse style="padding: 0;" class="el-input__inner">
-          <div  v-bind:style="{height:selectColor.length>6?'auto':'38px'}"  class="tagList colorCode"><el-tag
+          <div  class="tagList colorCode"><el-tag
 
             v-for="(tag,index) in selectColor"
             :key="tag.name"
@@ -105,12 +105,12 @@
         </el-collapse>
       </el-form-item>
       <el-form-item label="成功次数" prop="successCount">
-          <el-input-number v-model="dataForm.successCount" maxlength="30" placeholder="成功次数"></el-input-number>
+          <el-input-number v-model="dataForm.successCount"  placeholder="成功次数"></el-input-number>
         </el-form-item>
 
 
       <el-form-item label="日年化率" prop="dayRate">
-          <el-input-number v-model="dataForm.dayRate" maxlength="30" placeholder="日年化率"></el-input-number>%
+          <el-input-number v-model="dataForm.dayRate"  placeholder="日年化率"></el-input-number>%
         </el-form-item>
 
       <el-form-item label="状态" prop="status">
@@ -156,6 +156,10 @@
     height: 50px;
     display: block;
   }
+ .el-collapse-item__wrap{
+   position: relative;
+   z-index: 111;
+ }
 </style>
 <script>
   export default {
@@ -218,7 +222,11 @@
       getColor (item) {
         var arr
         if (this.dataForm.hotTag != '') {
-          arr = this.dataForm.hotTag.split(',')
+          if (this.dataForm.hotTag.indexOf('，') != -1) {
+            arr = this.dataForm.hotTag.split('，')
+          } else {
+            arr = this.dataForm.hotTag.split(',')
+          }
         } else {
           arr = []
         }
@@ -460,8 +468,12 @@
             }
             var arr2 = []
             var str = this.dataForm.hotTag
-            if (this.dataForm.hotTag != '') {
-              arr2 = str.split(',')
+            if (str != '') {
+              if (str.indexOf('，') != -1) {
+                arr2 = str.split('，')
+              } else {
+                arr2 = str.split(',')
+              }
             } else {
               arr2 = []
             }

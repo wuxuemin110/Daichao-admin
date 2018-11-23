@@ -5,7 +5,7 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="分类名称" prop="typeName">
-        <el-input v-model="dataForm.typeName" maxlength="30" placeholder="分类名称"></el-input>
+        <el-input v-model="dataForm.typeName"  placeholder="分类名称"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

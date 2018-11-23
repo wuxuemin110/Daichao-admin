@@ -5,13 +5,13 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="公司名称" prop="companyName">
-        <el-input v-model="dataForm.companyName" maxlength="30" placeholder="公司名称"></el-input>
+        <el-input v-model="dataForm.companyName"  placeholder="公司名称"></el-input>
       </el-form-item>
       <el-form-item label="联系人" prop="contactName">
-      <el-input v-model="dataForm.contactName" maxlength="30" placeholder="联系人"></el-input>
+      <el-input v-model="dataForm.contactName"  placeholder="联系人"></el-input>
       </el-form-item>
       <el-form-item label="联系号码" prop="contactMobile">
-      <el-input v-model="dataForm.contactMobile" maxlength="30" placeholder="联系号码"></el-input>
+      <el-input v-model="dataForm.contactMobile"  placeholder="联系号码"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

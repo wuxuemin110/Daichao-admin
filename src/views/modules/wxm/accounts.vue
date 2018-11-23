@@ -1,11 +1,22 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <!--<el-form-item>-->
-        <!--<el-input v-model="dataForm.productNum" placeholder="产品编号查询" clearable></el-input>-->
-      <!--</el-form-item>-->
+     <el-form-item>
+        <el-input v-model="dataForm.productNum" placeholder="产品编号" clearable></el-input>
+      </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.productName" placeholder="产品名字查询" clearable></el-input>
+        <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="日期" >
+        <el-date-picker
+          unlink-panels
+          v-model="dataForm.date"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -34,10 +45,24 @@
         prop="price"
         header-align="center"
         align="center"
-        label="接入单价">
+        label="合作单位">
         <template slot-scope="scope">
           <span>{{scope.row.price }}元</span>
         </template>
+      </el-table-column>
+      <el-table-column
+        prop="sumClickComplete"
+        header-align="center"
+        align="center"
+        label="累计点击数">
+      </el-table-column>
+
+
+      <el-table-column
+        prop="sumSettedRegistered"
+        header-align="center"
+        align="center"
+        label="累计结算注册数">
       </el-table-column>
       <el-table-column
         prop="conversionRate"
@@ -47,19 +72,6 @@
         <template slot-scope="scope">
           <span>{{scope.row.conversionRate }}%</span>
         </template>
-      </el-table-column>
-
-      <el-table-column
-        prop="sumSettedRegistered"
-        header-align="center"
-        align="center"
-        label="已结算注册数">
-      </el-table-column>
-      <el-table-column
-        prop="sumClickComplete"
-        header-align="center"
-        align="center"
-        label="累计点击数">
       </el-table-column>
       <el-table-column
         prop="sumSettedCount"
@@ -129,7 +141,8 @@
       return {
         dataForm: {
           productNum: null,
-          productName:null
+          productName:null,
+          date:null
         },
         dataList: [],
         pageIndex: 1,
@@ -168,8 +181,10 @@
             'token':this.$cookie.get('token'),
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'productNum': this.dataForm.productNum || null,
+            'productDisplayNum': this.dataForm.productNum || null,
             'productName':this.dataForm.productName || null,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

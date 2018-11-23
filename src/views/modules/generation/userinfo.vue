@@ -5,7 +5,7 @@
         <el-input v-model="dataForm.mobile" placeholder="用户名" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="dataForm.channelId" placeholder="请选择渠道名字">
+        <el-select v-model="dataForm.channelId" placeholder="渠道名称">
           <el-option
             v-for="item in selectList"
             :key="item.id"
@@ -37,6 +37,20 @@
       <el-form-item label='登录次数'>
         <el-input-number v-model="dataForm.loginCount" placeholder="登录次数" clearable></el-input-number>
       </el-form-item>
+
+      <el-form-item label="注册日期" >
+        <el-date-picker
+          unlink-panels
+          v-model="dataForm.date"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
+
+
       <el-form-item label='点击次数'>
         <el-input-number v-model="dataForm.clickCount" placeholder="点击次数" clearable></el-input-number>
       </el-form-item>
@@ -51,9 +65,7 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
-
       style="width: 100%;">
-
       <el-table-column
         prop="mobile"
         header-align="center"
@@ -151,7 +163,8 @@
           market:'',
           lastLoginTime: (new Date()).getTime(),
           loginCount: 0,
-          clickCount: 0
+          clickCount: 0,
+          date: null
         },
         fullscreenLoading: false,
         dataList: [],
@@ -201,19 +214,14 @@
             'market':this.dataForm.market,
             'lastLoginTime': this.dataForm.lastLoginTime,
             'loginCount': this.dataForm.loginCount,
-            'clickCount': this.dataForm.clickCount
+            'clickCount': this.dataForm.clickCount,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
-            /*var selectList = []
-            for(var i= 0;i<data.page.list.length;i++){
-              if(data.page.list[i].channelId != null){
-                selectList.push(data.page.list[i])
-              }
-            }
-            this.selectList = this.arrayUnique(selectList,'channelName')*/
 
           } else {
             this.dataList = []

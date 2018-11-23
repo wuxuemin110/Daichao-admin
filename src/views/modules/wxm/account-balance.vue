@@ -5,13 +5,13 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
       <el-form-item label="产品编号" >
-        <el-input :disabled="true" v-model="dataForm.productDisplayNum" maxlength="30" placeholder="产品编号"></el-input>
+        <el-input :disabled="true" v-model="dataForm.productDisplayNum"  placeholder="产品编号"></el-input>
       </el-form-item>
       <el-form-item label="产品名字">
-        <el-input :disabled="true" v-model="dataForm.productName" maxlength="30" placeholder="产品名字"></el-input>
+        <el-input :disabled="true" v-model="dataForm.productName"  placeholder="产品名字"></el-input>
       </el-form-item>
       <el-form-item label="总充值" >
-        <el-input :disabled="true" v-model="dataForm.totalRecharge" maxlength="30" placeholder="总充值"></el-input>
+        <el-input :disabled="true" v-model="dataForm.totalRecharge"  placeholder="总充值"></el-input>
       </el-form-item>
       <el-form-item label="日期" prop="companyName">
         <!--<el-date-picker
@@ -37,16 +37,16 @@
       </el-form-item>
 
       <el-form-item label="单价" prop="price">
-        <el-input v-model="dataForm.price" maxlength="30" placeholder="单价"></el-input>
+        <el-input v-model="dataForm.price"  placeholder="单价"></el-input>
       </el-form-item>
       <el-form-item label="结算注册数" prop="settedRegistered" >
-        <el-input v-model="dataForm.settedRegistered" maxlength="30" placeholder="结算注册数"></el-input>
+        <el-input v-model="dataForm.settedRegistered"  placeholder="结算注册数"></el-input>
       </el-form-item>
       <el-form-item label="累计点击数" >
-        <el-input   :disabled="true" v-model="dataForm.clickComplete" maxlength="30" placeholder="累计点击数"></el-input>
+        <el-input   :disabled="true" v-model="dataForm.clickComplete"  placeholder="累计点击数"></el-input>
       </el-form-item>
      <!-- <el-form-item label="注册转化率" >
-        <el-input style="width: 80%"  :disabled="true" v-model="dataForm.conversionRate" maxlength="30" placeholder="注册转化率"></el-input>
+        <el-input style="width: 80%"  :disabled="true" v-model="dataForm.conversionRate"  placeholder="注册转化率"></el-input>
         %
       </el-form-item>-->
     </el-form>
@@ -118,11 +118,7 @@
           }).then(({data})=>{
             if (data && data.code === 0){
               this.dataForm.clickComplete = data.clickComplete
-             /* if(this.dataForm.clickComplete == 0){
-                this.dataForm.conversionRate = 0
-              }else {
-                this.dataForm.conversionRate = (this.dataForm.settedRegistered/this.dataForm.clickComplete)*100
-              }*/
+
 
             }else {
               this.$message.error(data.msg)
@@ -145,7 +141,6 @@
               params: this.$http.adornParams({
                 'token':this.$cookie.get('token'),
                 'productId':this.dataForm.productId,
-                //'conversionRate':this.dataForm.conversionRate,
                 'totalRecharge':this.dataForm.totalRecharge,
                 'price':this.dataForm.price,
                 'clickComplete':this.dataForm.clickComplete,
@@ -153,7 +148,8 @@
                 'totalRecharge':this.dataForm.totalRecharge,
                 'settedCount':this.dataForm.price * this.dataForm.settedRegistered,
                 'status':1,
-                'createTime':this.dataForm.date
+                'createTime':this.dataForm.date,
+                'uid': this.$store.state.user.id
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
