@@ -2,11 +2,12 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item  v-if="isAuth('loan:channel:list')" >
-        <el-input v-model="dataForm.channelName" placeholder="渠道名称" clearable style="width: 150px;"></el-input>
-      </el-form-item>
-      <el-form-item  v-if="isAuth('loan:channel:list')" >
         <el-input v-model="dataForm.channelId" placeholder="渠道编号" clearable style="width: 150px;"></el-input>
       </el-form-item>
+      <el-form-item  v-if="isAuth('loan:channel:list')" >
+        <el-input v-model="dataForm.channelName" placeholder="渠道名称" clearable style="width: 150px;"></el-input>
+      </el-form-item>
+
       <el-form-item label="日期">
         <el-date-picker
           v-model="dataForm.createTime"

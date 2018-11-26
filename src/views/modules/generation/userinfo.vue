@@ -5,7 +5,11 @@
         <el-input v-model="dataForm.mobile" placeholder="用户名" clearable></el-input>
       </el-form-item>
       <el-form-item>
+
+
+
         <el-select clearable v-model="dataForm.channelId" placeholder="渠道名称">
+
           <el-option
             v-for="item in selectList"
             :key="item.id"
@@ -116,6 +120,13 @@
         label="激活时间">
       </el-table-column>
       <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="center"
+        :formatter="dateFormat"
+        label="注册时间">
+      </el-table-column>
+      <el-table-column
         prop="lastLoginTime"
         header-align="center"
         align="center"
@@ -156,11 +167,11 @@
     data () {
       return {
         dataForm: {
-          mobile:'',//用户名
-          channelId:'',//渠道id
-          deviceSource:'',//设备
-          appName:'',//app名称
-          market:'',
+          mobile: '', // 用户名
+          channelId: '', // 渠道id
+          deviceSource: '', // 设备
+          appName: '', // app名称
+          market: '',
           lastLoginTime: (new Date()).getTime(),
           loginCount: 0,
           clickCount: 0,
@@ -173,7 +184,7 @@
         totalPage: 0,
         dataListLoading: false,
         addOrUpdateVisible: false,
-        selectList:[]
+        selectList: []
       }
     },
     components: {
@@ -207,11 +218,11 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'mobile':this.dataForm.mobile,
-            'channelId':this.dataForm.channelId,
-            'deviceSource':this.dataForm.deviceSource,
-            'appName':this.dataForm.appName,
-            'market':this.dataForm.market,
+            'mobile': this.dataForm.mobile,
+            'channelId': this.dataForm.channelId,
+            'deviceSource': this.dataForm.deviceSource,
+            'appName': this.dataForm.appName,
+            'market': this.dataForm.market,
             'lastLoginTime': this.dataForm.lastLoginTime,
             'loginCount': this.dataForm.loginCount,
             'clickCount': this.dataForm.clickCount,
@@ -222,7 +233,6 @@
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
-
           } else {
             this.dataList = []
             this.totalPage = 0
@@ -230,8 +240,8 @@
           this.dataListLoading = false
         })
       },
-      Download(){
-        window.location.href =this.$http.adornUrl(`/sys/report/userInfoReportDownload?token=${this.$cookie.get('token')}&mobile=${this.dataForm.mobile}&channelId=${this.dataForm.channelId}&deviceSource=${this.dataForm.deviceSource}&appName=${this.dataForm.appName}&market=${this.dataForm.market}`)
+      Download () {
+        window.location.href = this.$http.adornUrl(`/sys/report/userInfoReportDownload?token=${this.$cookie.get('token')}&mobile=${this.dataForm.mobile}&channelId=${this.dataForm.channelId}&deviceSource=${this.dataForm.deviceSource}&appName=${this.dataForm.appName}&market=${this.dataForm.market}`)
       },
       // 每页数
       sizeChangeHandle (val) {
@@ -249,8 +259,8 @@
           url: this.$http.adornUrl(`/sys/channel/list`),
           method: 'get',
           params: this.$http.adornParams({
-            'page':1,
-            'limit': 999,
+            'page': 1,
+            'limit': 999
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

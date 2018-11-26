@@ -2,11 +2,11 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.name" placeholder="输入公司名称查询" clearable></el-input>
+        <el-input v-model="dataForm.companyId" placeholder="公司编号" clearable></el-input>
       </el-form-item>
 
       <el-form-item>
-        <el-input v-model="dataForm.id" placeholder="输入公司ID查询" clearable></el-input>
+        <el-input v-model="dataForm.companyName" placeholder="公司名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -40,7 +40,7 @@
         label="联系人">
       </el-table-column>
       <el-table-column
-        prop="contactMobile "
+        prop="contactMobile"
         header-align="center"
         align="center"
         label="联系电话">
@@ -92,8 +92,8 @@
     data () {
       return {
         dataForm: {
-          name: null,
-          id:null
+          productName: null,
+          productDisplayNum: null,
         },
         dataList: [],
         pageIndex: 1,
@@ -126,10 +126,11 @@
           method: 'get',
           params: this.$http.adornParams({
             'token': this.$cookie.get('token'),
+
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'companyName': this.dataForm.name || null,
-            'companyId':this.dataForm.id || null
+            'companyName': this.dataForm.companyName || null,
+            'companyId': this.dataForm.companyId || null,
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

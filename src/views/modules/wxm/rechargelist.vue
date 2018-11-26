@@ -7,6 +7,7 @@
       <el-form-item>
         <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
       </el-form-item>
+
       <el-form-item label="日期" >
         <el-date-picker
           unlink-panels
@@ -44,7 +45,7 @@
         prop="productName"
         header-align="center"
         align="center"
-        label="产品名字">
+        label="产品名称">
       </el-table-column>
 
       <el-table-column

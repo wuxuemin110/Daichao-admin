@@ -105,7 +105,6 @@
         this.dataForm.productName = item.productName; //产品名字
       },
       change(item){
-        console.log(this.dataForm.date)
         if(item){
           this.$http({
             url: this.$http.adornUrl(`/generation/companyProduct/clickComplete/${ this.dataForm.productId}`),
@@ -148,7 +147,7 @@
                 'totalRecharge':this.dataForm.totalRecharge,
                 'settedCount':this.dataForm.price * this.dataForm.settedRegistered,
                 'status':1,
-                'createTime':this.dataForm.date,
+                'createTime':this.dataForm.date + ' 00:00:00',
                 'uid': this.$store.state.user.id
               })
             }).then(({data}) => {

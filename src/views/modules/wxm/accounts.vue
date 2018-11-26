@@ -45,7 +45,7 @@
         prop="price"
         header-align="center"
         align="center"
-        label="合作单位">
+        label="合作单价">
         <template slot-scope="scope">
           <span>{{scope.row.price }}元</span>
         </template>
@@ -161,7 +161,7 @@
     },
     activated () {
       this.getDataList()
-      console.log(this.$store.state.user)
+
     },
     methods: {
       dateFormat (row, column) {
@@ -173,6 +173,7 @@
       },
       // 获取数据列表
       getDataList () {
+
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl(`/generation/companyProduct/balance/sum/list`),
@@ -183,7 +184,7 @@
             'limit': this.pageSize,
             'productDisplayNum': this.dataForm.productNum || null,
             'productName':this.dataForm.productName || null,
-            'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
+            'startDate': this.dataForm.date !== null ? this.dataForm.date[0]  : null,
             'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
           })
         }).then(({data}) => {

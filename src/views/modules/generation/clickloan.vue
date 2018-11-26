@@ -7,10 +7,11 @@
       <el-form-item>
         <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
       </el-form-item>
-      <el-form-item label="点击时间">
+
+      <el-form-item label="日期" >
         <el-date-picker
           unlink-panels
-          v-model="dataForm.createTime"
+          v-model="dataForm.date"
           type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="至"
@@ -18,6 +19,7 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
+
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <!--<el-button v-if="isAuth('sys:channel:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
@@ -55,7 +57,7 @@
         header-align="center"
         align="center"
 
-        label="代超名称">
+        label="产品名称">
       </el-table-column>
       <el-table-column
         prop="count"

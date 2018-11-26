@@ -53,7 +53,10 @@
         visible: false,
         dataForm:{
           companyName:null,
-          companyId:null
+          companyId:null,
+          contactName:null,
+          contactMobile:null
+
         },
         dataRule: {
           companyName: [
@@ -72,7 +75,7 @@
     methods: {
       init (item) {
         this.visible = true
-        console.log(item)
+
         if(item == undefined){
           this.dataForm.companyName = null
           this.dataForm.companyId = null
@@ -99,6 +102,8 @@
                 'token':this.$cookie.get('token'),
                 'companyId':this.dataForm.companyId || null,
                 'companyName': this.dataForm.companyName,
+                'contactName':this.dataForm.contactName,
+                'contactMobile':this.dataForm.contactMobile
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

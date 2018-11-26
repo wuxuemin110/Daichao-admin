@@ -7,17 +7,23 @@
       <el-form-item>
         <el-input v-model="dataForm.productName" placeholder="产品名称" clearable></el-input>
       </el-form-item>
+
       <el-form-item label="日期" >
         <el-date-picker
           unlink-panels
           v-model="dataForm.date"
           type="datetimerange"
+
+
           value-format="yyyy-MM-dd HH:mm:ss"
+
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
+
+
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('generation:companyProduct:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -27,7 +33,6 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
-
       style="width: 100%;">
       <el-table-column
         prop="createTime"
@@ -132,9 +137,10 @@
     data () {
       return {
         dataForm: {
+
+          productName: null,
           productDisplayNum: null,
-          productName:null,
-          date:null
+          date: null
         },
         dataList: [],
         pageIndex: 1,
@@ -206,8 +212,6 @@
       },
       // 删除
       deleteHandle (id) {
-
-
         this.$confirm(`确定要删除吗？`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -216,9 +220,9 @@
           this.$http({
             url: this.$http.adornUrl('/generation/companyProduct/delete'),
             method: 'post',
-            params:this.$http.adornParams({
-              'token':this.$cookie.get('token'),
-              'productId':id
+            params: this.$http.adornParams({
+              'token': this.$cookie.get('token'),
+              'productId': id
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
@@ -233,7 +237,7 @@
             } else {
               this.$message.error(data.msg)
             }
-          }).catch(()=>{
+          }).catch(() => {
 
           })
         })
