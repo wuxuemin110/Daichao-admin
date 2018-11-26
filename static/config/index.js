@@ -9,8 +9,8 @@
   window.SITE_CONFIG['baseUrl'] = 'http://192.168.0.118:8080';
 
 
-  // window.SITE_CONFIG['baseUrl'] = 'http://192.168.0.123:8080'; //唐杰
-  //   window.SITE_CONFIG['baseUrl'] = 'http://juzi.liulianggame.com:8080/loan-server';
+  // window.SITE_CONFIG['baseUrl'] = ''; //唐杰
+  //   window.SITE_CONFIG['baseUrl'] = '';
 
 
   // cdn地址 = 域名 + 版本号
