@@ -47,7 +47,7 @@
           unlink-panels
           v-model="dataForm.date"
           type="datetimerange"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="timestamp"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
@@ -113,7 +113,7 @@
         label="app名字">
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="activeTime"
         header-align="center"
         align="center"
         :formatter="dateFormat"

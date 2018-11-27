@@ -11,7 +11,7 @@
     <!--</span>-->
     <!--</el-dialog>-->
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="110px">
-      <el-form-item label="公司" >
+      <el-form-item label="产品" >
         <el-autocomplete
           v-model="companyName"
           :fetch-suggestions="querySearchAsync"
