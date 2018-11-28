@@ -119,6 +119,9 @@
           <el-radio v-model="dataForm.status" label="3">下架</el-radio>
         </template>
       </el-form-item>
+      <el-form-item label="排序" prop="level">
+      <el-input-number v-model="dataForm.level" maxlength="250" placeholder="序号"></el-input-number>
+      </el-form-item>
         <el-form-item label="跳转地址" prop="linkUrl">
           <el-input disabled v-model="dataForm.linkUrl" maxlength="250" placeholder="跳转地址"></el-input>
         </el-form-item>
@@ -247,20 +250,21 @@
       },
       getTab (item, item2) {
         var obj = Object.assign({superTypeId: item2.typeId}, item)
+        console.log(this.selectTab,item,item2)
         var index2 = this.selectTab.findIndex((value, index3, arr) => {
           console.log(item2.typeId)
-          return value.superTypeId == item2.typeId
+          return value.typeId == item.typeId
         })
         if (index2 != -1) {
           this.$message({
-            message: '每种分类下的标签只能选择一个',
+            message: '不要选择重复的标签',
             type: 'warning'
           })
         } else {
           this.selectTab.push(obj)
         }
 
-        console.log(this.selectTab)
+
       },
       tabClose (tag) {
         this.selectTab.splice(this.selectTab.indexOf(tag), 1)
@@ -340,6 +344,7 @@
                   this.dataForm.status = data.loans.status + ''
                   this.dataForm.offCount = data.loans.offCount
                   this.dataForm.hotTag = data.loans.hotTag
+                  this.dataForm.level = data.loans.level
                   // this.dataForm.changeoffCount = data.loans.offCount
                   this.companyName = data.loans.loanName
                   this.selectProduct.productName = data.loans.loanName
@@ -382,7 +387,8 @@
             orderNum: '1',
             status: '0',
             offCount: 10000,
-            hotTag: ''
+            hotTag: '',
+            level: 0
           }
           this.selectProduct = {}
           this.companyName = ''

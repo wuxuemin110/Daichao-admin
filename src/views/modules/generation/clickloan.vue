@@ -16,6 +16,7 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="至"
           start-placeholder="开始日期"
+          :default-time="['00:00:00', '23:59:59']"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
@@ -38,7 +39,7 @@
       style="width: 100%;">
 
       <el-table-column
-        prop="date"
+        prop="insertTime"
         v-if="isTrue"
         header-align="center"
         align="center"
@@ -53,7 +54,7 @@
         label="产品编号">
       </el-table-column>
       <el-table-column
-        prop="loanTitle"
+        prop="productName"
         header-align="center"
         align="center"
 
@@ -64,14 +65,14 @@
         header-align="center"
         align="center"
 
-        label="点击次数">
+        label="当日点击次数">
       </el-table-column>
       <el-table-column
         prop="completeCount"
         header-align="center"
         align="center"
 
-        label="加载完成次数">
+        label="当日加载完成次数">
       </el-table-column>
       <el-table-column
         prop="sumRegisteredCount"
@@ -137,34 +138,55 @@
 
         fullscreenLoading: false,
 
-        allList: ['合计']
+        allList: ['合计','','',0,0,0,0,0]
 
       }
     },
+    mounted () {
+    },
     activated () {
       this.getDataList()
-      this.getALLdataList()
     },
     methods: {
       // 获取合计
+
       getSummaries (param) {
+
+       // this.getALLdataList()
+        console.log(param)
+          // console.log(data.list, this.allList)
+          // return this.allList
+
         return this.allList
       },
-      getALLdataList () {
-        this.$http({
-          url: this.$http.adornUrl(`/generation/clickloans/clickSum`),
+      async getALLdataList () {
+        var _this = this
+        var result = await _this.$http({
+          url: _this.$http.adornUrl(`/generation/clickloans/clickSum`),
           method: 'get',
-          params: this.$http.adornParams({
-            'token': this.$cookie.get('token')
+          params: _this.$http.adornParams({
+            'token': _this.$cookie.get('token'),
+            'page': _this.pageIndex,
+            'limit': _this.pageSize,
+            'productName': _this.dataForm.productName || null,
+            'productDisplayNum': _this.dataForm.productDisplayNum || null,
+            'startDate': _this.dataForm.date !== null ? _this.dataForm.date[0] : null,
+            'endDate': _this.dataForm.date !== null ? _this.dataForm.date[1] : null,
+
           })
-        }).then(({data}) => {
+        })
+        result.then(({data}) => {
+          // console.log(data.list, this.allList)
           if (data && data.code === 0) {
-            this.allList[3] = data.list[0]
-            this.allList[4] = data.list[1]
-            this.allList[5] = data.list[2]
-            this.allList[6] = data.list[3]
-            this.allList[7] = data.list[4]
+            _this.allList[3] = data.list[0]
+            _this.allList[4] = data.list[1]
+            _this.allList[5] = data.list[2]
+            _this.allList[6] = data.list[3]
+            _this.allList[7] = data.list[4]
           }
+          console.log(_this.allList)
+          // console.log(data.list, this.allList)
+          // return _this.allList
         })
       },
       dateFormat (row, column) {
@@ -185,7 +207,7 @@
         } else {
           this.isTrue = false
         }
-
+        // this.getALLdataList()
         this.$http({
           url: this.$http.adornUrl(`/generation/clickloans/all/list`),
           method: 'get',
@@ -196,17 +218,24 @@
             'productName': this.dataForm.productName || null,
             'productDisplayNum': this.dataForm.productDisplayNum || null,
             'startDate': this.dataForm.date !== null ? this.dataForm.date[0] : null,
-            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null
+            'endDate': this.dataForm.date !== null ? this.dataForm.date[1] : null,
+            'flag': this.pageIndex
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
+            this.allList[3] = data.page.objectList[0]
+            this.allList[4] = data.page.objectList[1]
+            this.allList[5] = data.page.objectList[2]
+            this.allList[6] = data.page.objectList[3]
+            this.allList[7] = data.page.objectList[4]
           } else {
             this.dataList = []
             this.totalPage = 0
           }
           this.dataListLoading = false
+          // this.getALLdataList()
         })
       },
       // 每页数

@@ -47,6 +47,7 @@
           unlink-panels
           v-model="dataForm.date"
           type="datetimerange"
+          :default-time="['00:00:00', '23:59:59']"
           value-format="timestamp"
           range-separator="至"
           start-placeholder="开始日期"
@@ -172,7 +173,7 @@
           deviceSource: '', // 设备
           appName: '', // app名称
           market: '',
-          lastLoginTime: (new Date()).getTime(),
+          lastLoginTime: (new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())).getTime(),
           loginCount: 0,
           clickCount: 0,
           date: null
