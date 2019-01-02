@@ -7,6 +7,9 @@
       <el-form-item label="分类名称" prop="typeName">
         <el-input v-model="dataForm.typeName"  placeholder="分类名称"></el-input>
       </el-form-item>
+      <el-form-item label="分类排序" prop="level">
+        <el-input v-model="dataForm.level"  placeholder="分类排序"></el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -54,6 +57,9 @@
         dataRule: {
           typeName: [
             { required: true, message: '分类名称不能为空', trigger: 'blur' }
+          ],
+          level: [
+            { required: true, message: '分类排序不能为空', trigger: 'blur' }
           ]
         }
       }

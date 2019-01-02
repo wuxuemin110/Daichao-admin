@@ -58,7 +58,7 @@
         label="渠道名称">
       </el-table-column>
       <el-table-column
-        v-if="isAuth('loan:channel:listInfo')"
+        v-if="isAuth('loan:channel:realregnum')"
         prop="realRegister"
         header-align="center"
         align="center"
@@ -69,14 +69,14 @@
         prop="showRegister"
         header-align="center"
         align="center"
-
+        v-if="isAuth('loan:channel:regnum')"
         label="注册数">
       </el-table-column>
       <el-table-column
         prop="percent"
         header-align="center"
         align="center"
-        v-if="isAuth('loan:channel:listInfo')"
+        v-if="isAuth('loan:channel:ratio')"
         label="注册数扣量比例">
         <template slot-scope="scope">
           <span>{{scope.row.percent}}%</span>
@@ -84,7 +84,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="isAuth('loan:channel:listInfo')"
+        v-if="isAuth('sys:channelRegister:info')"
         header-align="center"
         align="center"
         width="80"
@@ -176,8 +176,8 @@
         width="80"
         label="操作">
         <template slot-scope="scope">
-          <el-button  type="text" size="small" @click="addOrUpdateHandle2(scope.row.id)">修改</el-button>
-          <el-button  type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button  type="text" v-if="isAuth('sys:channel:update')" size="small" @click="addOrUpdateHandle2(scope.row.id)">修改</el-button>
+          <el-button  type="text" v-if="isAuth('sys:channel:delete')" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
 

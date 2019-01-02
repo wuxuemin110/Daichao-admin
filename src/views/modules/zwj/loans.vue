@@ -237,7 +237,7 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'name': this.dataForm.name
+            'flag': 0
           })
         }).then(({data}) => {
           console.log(data)

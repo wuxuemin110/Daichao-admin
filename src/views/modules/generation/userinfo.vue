@@ -47,7 +47,8 @@
           unlink-panels
           v-model="dataForm.date"
           type="datetimerange"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          :default-time="['00:00:00', '23:59:59']"
+          value-format="timestamp"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
@@ -113,7 +114,7 @@
         label="app名字">
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="activeTime"
         header-align="center"
         align="center"
         :formatter="dateFormat"
@@ -172,7 +173,7 @@
           deviceSource: '', // 设备
           appName: '', // app名称
           market: '',
-          lastLoginTime: (new Date()).getTime(),
+          lastLoginTime: (new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())).getTime(),
           loginCount: 0,
           clickCount: 0,
           date: null

@@ -146,7 +146,8 @@
           url:this.$http.adornUrl(`/generation/companyInfo/list`),
           methods:'get',
           params:this.$http.adornParams({
-            'token':this.$cookie.get('token')
+            'token':this.$cookie.get('token'),
+            'limit': '99999'
           })
         }).then(({data})=>{
           if (data && data.code === 0) {

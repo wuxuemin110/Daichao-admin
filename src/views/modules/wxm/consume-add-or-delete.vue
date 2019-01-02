@@ -10,8 +10,11 @@
       <el-form-item label="产品名称" prop="productName">
         <el-input disabled v-model="dataForm.productName"  placeholder="产品名称"></el-input>
       </el-form-item>
-      <el-form-item label="剩余点击次数" prop="adjustClick">
-        <el-input v-model="dataForm.adjustClick"  placeholder="剩余点击次数"></el-input>
+      <el-form-item label="剩余点击次数" prop="residualClick">
+        <el-input disabled v-model="dataForm.residualClick"  placeholder="剩余点击次数"></el-input>
+      </el-form-item>
+      <el-form-item label="调整点击数" prop="adjustClick">
+        <el-input  v-model="dataForm.adjustClick"  placeholder="剩余点击次数"></el-input>
       </el-form-item>
       <el-form-item label="单日点击上限" prop="clickLimit">
         <el-input v-model="dataForm.clickLimit"  placeholder="单日点击上限"></el-input>
@@ -64,6 +67,7 @@
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
+            	console.log(data)
               this.dataForm = {}
               this.dataForm.id = data.companyProductConsume.id
               this.dataForm.productDisplayNum = data.companyProduct.productDisplayNum
@@ -71,6 +75,7 @@
               this.status = (data.companyProductConsume.status + '')
               this.dataForm.adjustClick = data.companyProductConsume.adjustClick-0
               this.dataForm.clickLimit = data.companyProductConsume.clickLimit-0
+							this.dataForm.residualClick = data.companyProductConsume.residualClick
 
             } else {
               this.$message.error(data.msg)
@@ -95,7 +100,8 @@
                 'adjustClick': this.dataForm.adjustClick,
                 'clickLimit': this.dataForm.clickLimit,
                 'status' : this.status,
-                'uid': this.$store.state.user.id
+                'uid': this.$store.state.user.id,
+                'residualClick':this.dataForm.residualClick
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

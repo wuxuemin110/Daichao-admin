@@ -13,6 +13,7 @@
           unlink-panels
           v-model="dataForm.date"
           type="datetimerange"
+          :default-time="['00:00:00', '23:59:59']"
           value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="至"
           start-placeholder="开始日期"

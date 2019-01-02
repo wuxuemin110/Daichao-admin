@@ -29,6 +29,12 @@
         label="分类名称">
       </el-table-column>
       <el-table-column
+        prop="level"
+        header-align="center"
+        align="center"
+        label="分类排序">
+      </el-table-column>
+      <el-table-column
         fixed="right"
         header-align="center"
         align="center"
